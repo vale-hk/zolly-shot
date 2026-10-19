@@ -7,6 +7,6 @@
 - [x] Test duplicate rules and verify signed-in save/reload flow.
 
 ## Security architecture deliverables
-- [ ] Audit current controls and verify Chilean legal sources.
-- [ ] Deliver technical security architecture, authentication examples and phased implementation plan.
-- [ ] Deliver secure-registration checklist distinguishing verified controls from pending work.
+- [x] Audit current controls and verify Chilean legal sources.
+- [x] Deliver technical security architecture, authentication examples and phased implementation plan.
+- [x] Deliver secure-registration checklist distinguishing verified controls from pending work.
