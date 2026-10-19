@@ -11,6 +11,7 @@ export const signupSchema = z.object({
 export const otpSchema = z.string().regex(/^\d{6}$/, 'Escribe los seis dígitos de tu aplicación autenticadora.');
 
 export function safeAuthError(code?: string) {
+  if (code === 'email_address_invalid' || code === 'email_address_not_authorized') return 'Usa un correo real que pueda recibir el enlace de confirmación.';
   if (code === 'weak_password') return 'Elige una contraseña larga, única y que no haya sido filtrada.';
   if (code === 'over_email_send_rate_limit' || code === 'over_request_rate_limit') return 'Demasiados intentos. Espera unos minutos antes de volver a intentar.';
   return 'No se pudo completar la solicitud. Revisa los datos e intenta nuevamente.';

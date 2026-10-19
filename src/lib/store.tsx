@@ -4,7 +4,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { FEED, MEDIA, QUOTES } from './mock-data';
 import { saveOnce } from './library-rules';
-import { supabase as authClient } from '@/integrations/supabase/client';
 import type { Activity, MediaItem, MediaStatus, Quote, UserMediaStatus } from './types';
 import { StoreContext, type Store } from './store-context';
 export { useStore } from './store-context';
@@ -27,7 +26,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     identity.current = next?.id ?? null; setUser(next); replaceStatuses([]); setLoading(true);
     const id = next?.id ?? null;
     if (next) {
-      const { data, error } = await authClient.auth.mfa.getAuthenticatorAssuranceLevel();
+      const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
       if (identity.current !== id || syncRevision.current !== revision) return;
       if (error || (data?.nextLevel === 'aal2' && data.currentLevel !== 'aal2')) {
         setAuthMode('login'); setLoading(false); return;
