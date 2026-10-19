@@ -10,3 +10,9 @@
 - [x] Audit current controls and verify Chilean legal sources.
 - [x] Deliver technical security architecture, authentication examples and phased implementation plan.
 - [x] Deliver secure-registration checklist distinguishing verified controls from pending work.
+
+## Functional security and privacy
+- [ ] Harden hosted registration and password settings, validation and recovery.
+- [ ] Remove public account identifiers and automatic activity sharing; enforce database validation.
+- [ ] Add authenticator verification and account security controls.
+- [ ] Add privacy notice and defensive response headers; verify registration and owner isolation.
