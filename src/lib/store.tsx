@@ -1,22 +1,12 @@
-import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from 'react';
+import { useState, useEffect, useRef, type ReactNode } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { FEED, MEDIA, QUOTES } from './mock-data';
 import { saveOnce } from './library-rules';
 import type { Activity, MediaItem, MediaStatus, Quote, UserMediaStatus } from './types';
-interface Store {
-  media: MediaItem[]; statuses: UserMediaStatus[]; quotes: Quote[]; feed: Activity[];
-  user: User | null; displayName: string; loading: boolean; authMode: 'login' | 'signup' | null;
-  openAuth: (mode?: 'login' | 'signup') => void; closeAuth: () => void;
-  syncUser: (user: User | null) => Promise<void>;
-  addMedia: (m: Omit<MediaItem, 'id'>, status?: MediaStatus) => Promise<void>;
-  setStatus: (id: string, status: MediaStatus) => Promise<void | boolean>;
-  saveToWatchlist: (id: string) => Promise<void>;
-  rate: (id: string, rating: number, comment?: string) => Promise<void>;
-  addQuote: (id: string, text: string, timestamp: string) => Promise<void>;
-}
-const Ctx = createContext<Store | null>(null);
+import { StoreContext, type Store } from './store-context';
+export { useStore } from './store-context';
 const today = () => new Date().toLocaleDateString('en-CA');
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [media, setMedia] = useState<MediaItem[]>(MEDIA);
@@ -107,6 +97,5 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       setQuotes(q => [{ id: data.id, user: displayName, media_id, quote_text, timestamp }, ...q]); await post('quoted', media_id, quote_text);
     },
   };
-  return <Ctx.Provider value={store}>{children}</Ctx.Provider>;
+  return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 }
-export function useStore() { const store = useContext(Ctx); if (!store) throw new Error('useStore must be inside StoreProvider'); return store; }
