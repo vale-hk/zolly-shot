@@ -9,5 +9,8 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- App data flows through the store in src/lib/store.tsx (mock data for now); swap its internals for Lovable Cloud queries so pages stay unchanged.
+- All application data and identity flow through src/lib/store.tsx, using the generated browser Cloud client and RLS; this preserves the public page API and scopes library records to the signed-in user.
+- The root owns the single identity-transition listener; public pages show inline sign-in actions instead of redirect guards, so the landing and community remain browsable.
+- Bundled fictional catalog IDs remain stable and shared while user library rows use a composite user/movie primary key, so demo media can be saved persistently without duplicating user records.
+- CameraHeader owns scroll animation and MovieDetailModal is shared by catalog, feed, and habits; reusable media components remain type-agnostic.
 - Media components take a mediaType prop (movie|book) so books can be added without new components.

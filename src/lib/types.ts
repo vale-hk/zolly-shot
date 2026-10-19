@@ -9,6 +9,9 @@ export interface MediaItem {
   genre: string;
   poster_url: string;
   type: MediaType;
+  synopsis?: string | undefined;
+  director?: string | undefined;
+  duration?: number | undefined;
 }
 
 export interface UserMediaStatus {
@@ -16,6 +19,7 @@ export interface UserMediaStatus {
   status: MediaStatus;
   rating: number | null; // 0.5 - 5.0, step 0.5
   updated_at: string;
+  watched_at?: string | null;
 }
 
 export interface Quote {

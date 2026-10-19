@@ -1,53 +1,27 @@
-import type { ReactNode } from "react";
-import { Eye, Play, Bookmark, Star } from "lucide-react";
-import { RatingStars } from "./RatingStars";
-import { ItemStatusBadge } from "./ItemStatusBadge";
-import type { MediaItem, MediaStatus, MediaType } from "@/lib/types";
-
-interface Props {
-  item: MediaItem;
-  mediaType?: MediaType;
-  status?: MediaStatus | undefined;
-  rating?: number | null | undefined;
-  onRate?: () => void;
-  onStatus?: (s: MediaStatus) => void;
-}
-
+import { useState } from 'react';
+import { Eye, Play, Bookmark, Star, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useStore } from '@/lib/store';
+import { RatingStars } from './RatingStars';
+import { ItemStatusBadge } from './ItemStatusBadge';
+import { MovieDetailModal } from './MovieDetailModal';
+import type { MediaItem, MediaStatus, MediaType } from '@/lib/types';
+interface Props { item: MediaItem; mediaType?: MediaType; status?: MediaStatus | undefined; rating?: number | null | undefined; onRate?: () => void; onStatus?: (s: MediaStatus) => void; }
 export function MediaCard({ item, mediaType = item.type, status, rating, onRate, onStatus }: Props) {
-  return (
-    <article className="group relative overflow-hidden rounded-xl border bg-card transition hover:-translate-y-1 hover:shadow-glow">
-      <div className="relative aspect-[2/3] overflow-hidden">
-        <img src={item.poster_url} alt={item.title} loading="lazy" width={672} height={992} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-        <div className="absolute inset-0 bg-poster-fade" />
-        {status && (
-          <div className="absolute left-2 top-2">
-            <ItemStatusBadge status={status} mediaType={mediaType} />
-          </div>
-        )}
-        <div className="absolute right-2 top-2 flex flex-col gap-1 opacity-0 transition group-hover:opacity-100">
-          {onStatus && (
-            <>
-              <IconBtn label="Vista" onClick={() => onStatus("watched")}><Eye className="h-4 w-4" /></IconBtn>
-              <IconBtn label="Viendo" onClick={() => onStatus("watching")}><Play className="h-4 w-4" /></IconBtn>
-              <IconBtn label="Por ver" onClick={() => onStatus("watchlist")}><Bookmark className="h-4 w-4" /></IconBtn>
-            </>
-          )}
-          {onRate && <IconBtn label="Calificar" onClick={onRate}><Star className="h-4 w-4" /></IconBtn>}
-        </div>
-        <div className="absolute inset-x-0 bottom-0 p-3">
-          <h3 className="line-clamp-2 text-lg font-semibold leading-tight">{item.title}</h3>
-          <p className="mt-0.5 text-xs text-muted-foreground">{item.year} · {item.genre}</p>
-          {rating != null && <div className="mt-2"><RatingStars value={rating} size={14} /></div>}
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function IconBtn({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
-  return (
-    <button title={label} aria-label={label} onClick={onClick} className="rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-primary hover:text-primary-foreground">
-      {children}
-    </button>
-  );
+  const [detail, setDetail] = useState(false); const { statuses, saveToWatchlist } = useStore();
+  const saved = statuses.some(s => s.media_id === item.id);
+  return <><article className="film-frame group overflow-hidden transition hover:shadow-glow">
+    <div className="relative aspect-[2/3] overflow-hidden rounded-sm">
+      <Button variant="ghost" className="block h-full w-full overflow-hidden rounded-none p-0" aria-label={`Ver detalles de ${item.title}`} onClick={() => setDetail(true)}><img src={item.poster_url} alt={item.title} loading="lazy" width={672} height={992} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /></Button>
+      {status && <div className="pointer-events-none absolute left-2 top-2"><ItemStatusBadge status={status} mediaType={mediaType} /></div>}
+    </div>
+    <Button variant="link" className="mt-2 h-auto w-full justify-start whitespace-normal px-1 text-left font-display text-lg text-foreground" onClick={() => setDetail(true)}>{item.title}</Button>
+    <p className="px-1 text-xs text-muted-foreground">{item.year} · {item.genre}</p>
+    {rating != null && <div className="mt-2 px-1"><RatingStars value={rating} size={14} /></div>}
+    <div className="mt-3 flex items-center gap-1 border-t pt-2">
+      <Button variant="ghost" size="icon" disabled={saved} title={saved ? 'En tu lista' : 'Guardar en Mi Watchlist'} aria-label={saved ? 'En tu lista' : 'Guardar en Mi Watchlist'} onClick={() => saveToWatchlist(item.id)}>{saved ? <Check /> : <Bookmark />}</Button>
+      {onStatus && <><Button variant="ghost" size="icon" title="Vista" aria-label="Vista" onClick={() => onStatus('watched')}><Eye /></Button><Button variant="ghost" size="icon" title="Viendo" aria-label="Viendo" onClick={() => onStatus('watching')}><Play /></Button></>}
+      {onRate && <Button variant="ghost" size="icon" title="Calificar" aria-label="Calificar" onClick={onRate}><Star /></Button>}
+    </div>
+  </article><MovieDetailModal item={detail ? item : null} onClose={() => setDetail(false)} /></>;
 }

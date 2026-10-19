@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Modal, btnPrimary, inputCls } from "@/components/ui-kit/Modal";
 import { RatingStars } from "./RatingStars";
@@ -15,16 +16,16 @@ export function RateModal({ item, initial, onClose }: { item: MediaItem | null; 
         <p className="font-display text-3xl text-star">{value ? value.toFixed(1) : "—"}</p>
       </div>
       <textarea className={inputCls} rows={3} maxLength={280} placeholder="¿Qué te pareció? (opcional)" value={comment} onChange={(e) => setComment(e.target.value)} />
-      <button
+      <Button
         className={`${btnPrimary} mt-4 w-full`}
         disabled={!value}
-        onClick={() => {
-          if (item) rate(item.id, value, comment.trim() || undefined);
+        onClick={async () => {
+          if (item) await rate(item.id, value, comment.trim() || undefined);
           onClose();
         }}
       >
         Guardar y publicar
-      </button>
+      </Button>
     </Modal>
   );
 }
