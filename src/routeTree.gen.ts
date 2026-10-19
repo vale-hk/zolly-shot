@@ -14,7 +14,9 @@ import { Route as CitasRouteImport } from './routes/citas'
 import { Route as ExplorarRouteImport } from './routes/explorar'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as HabitosRouteImport } from './routes/habitos'
+import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SeguridadRouteImport } from './routes/seguridad'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,9 +43,19 @@ const HabitosRoute = HabitosRouteImport.update({
   path: '/habitos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacidadRoute = PrivacidadRouteImport.update({
+  id: '/privacidad',
+  path: '/privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeguridadRoute = SeguridadRouteImport.update({
+  id: '/seguridad',
+  path: '/seguridad',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -53,7 +65,9 @@ export interface FileRoutesByFullPath {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/habitos': typeof HabitosRoute
+  '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/seguridad': typeof SeguridadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +75,9 @@ export interface FileRoutesByTo {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/habitos': typeof HabitosRoute
+  '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/seguridad': typeof SeguridadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,14 +86,31 @@ export interface FileRoutesById {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/habitos': typeof HabitosRoute
+  '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/seguridad': typeof SeguridadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/citas' | '/explorar' | '/feed' | '/habitos' | '/reset-password'
+    | '/'
+    | '/citas'
+    | '/explorar'
+    | '/feed'
+    | '/habitos'
+    | '/privacidad'
+    | '/reset-password'
+    | '/seguridad'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/citas' | '/explorar' | '/feed' | '/habitos' | '/reset-password'
+  to:
+    | '/'
+    | '/citas'
+    | '/explorar'
+    | '/feed'
+    | '/habitos'
+    | '/privacidad'
+    | '/reset-password'
+    | '/seguridad'
   id:
     | '__root__'
     | '/'
@@ -85,7 +118,9 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/feed'
     | '/habitos'
+    | '/privacidad'
     | '/reset-password'
+    | '/seguridad'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,7 +129,9 @@ export interface RootRouteChildren {
   ExplorarRoute: typeof ExplorarRoute
   FeedRoute: typeof FeedRoute
   HabitosRoute: typeof HabitosRoute
+  PrivacidadRoute: typeof PrivacidadRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SeguridadRoute: typeof SeguridadRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -134,11 +171,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HabitosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacidad': {
+      id: '/privacidad'
+      path: '/privacidad'
+      fullPath: '/privacidad'
+      preLoaderRoute: typeof PrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seguridad': {
+      id: '/seguridad'
+      path: '/seguridad'
+      fullPath: '/seguridad'
+      preLoaderRoute: typeof SeguridadRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -150,7 +201,9 @@ const rootRouteChildren: RootRouteChildren = {
   ExplorarRoute: ExplorarRoute,
   FeedRoute: FeedRoute,
   HabitosRoute: HabitosRoute,
+  PrivacidadRoute: PrivacidadRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SeguridadRoute: SeguridadRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
