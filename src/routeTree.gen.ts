@@ -14,6 +14,7 @@ import { Route as CitasRouteImport } from './routes/citas'
 import { Route as ExplorarRouteImport } from './routes/explorar'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as HabitosRouteImport } from './routes/habitos'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const HabitosRoute = HabitosRouteImport.update({
   path: '/habitos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/habitos': typeof HabitosRoute
+  '/reset-password': typeof ResetPasswordRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/habitos': typeof HabitosRoute
+  '/reset-password': typeof ResetPasswordRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,22 @@ export interface FileRoutesById {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/habitos': typeof HabitosRoute
+  '/reset-password': typeof ResetPasswordRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/citas' | '/explorar' | '/feed' | '/habitos'
+  fullPaths:
+    '/' | '/citas' | '/explorar' | '/feed' | '/habitos' | '/reset-password'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/citas' | '/explorar' | '/feed' | '/habitos'
-  id: '__root__' | '/' | '/citas' | '/explorar' | '/feed' | '/habitos'
+  to: '/' | '/citas' | '/explorar' | '/feed' | '/habitos' | '/reset-password'
+  id:
+    | '__root__'
+    | '/'
+    | '/citas'
+    | '/explorar'
+    | '/feed'
+    | '/habitos'
+    | '/reset-password'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +94,7 @@ export interface RootRouteChildren {
   ExplorarRoute: typeof ExplorarRoute
   FeedRoute: typeof FeedRoute
   HabitosRoute: typeof HabitosRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HabitosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +150,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExplorarRoute: ExplorarRoute,
   FeedRoute: FeedRoute,
   HabitosRoute: HabitosRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

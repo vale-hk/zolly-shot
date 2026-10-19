@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 import { Plus, Quote as QuoteIcon } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { PageHeader } from "@/components/layout/AppShell";
@@ -8,6 +9,8 @@ import { useStore } from "@/lib/store";
 export const Route = createFileRoute("/citas")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Citas Célebres · CineTrack" },
       { name: "description", content: "Un muro con las frases que te marcaron del cine." },
       { property: "og:title", content: "Citas Célebres · CineTrack" },
@@ -18,17 +21,17 @@ export const Route = createFileRoute("/citas")({
 });
 
 function Quotes() {
-  const { quotes, media, addQuote } = useStore();
+  const { quotes, media, addQuote, user, openAuth } = useStore();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ media_id: "", text: "", ts: "" });
   const [err, setErr] = useState("");
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.media_id) return setErr("Elige una película");
     if (form.text.trim().length < 3 || form.text.length > 300) return setErr("La cita debe tener entre 3 y 300 caracteres");
     if (form.ts && !/^\d{1,2}:\d{2}:\d{2}$/.test(form.ts)) return setErr("Formato de tiempo hh:mm:ss");
-    addQuote(form.media_id, form.text.trim(), form.ts || "—");
+    await addQuote(form.media_id, form.text.trim(), form.ts || "—");
     setForm({ media_id: "", text: "", ts: "" });
     setErr("");
     setOpen(false);
@@ -36,7 +39,7 @@ function Quotes() {
 
   return (
     <>
-      <PageHeader title="Citas Célebres" subtitle="Frases que se quedan contigo después de los créditos." action={<button className={btnPrimary} onClick={() => setOpen(true)}><Plus className="h-4 w-4" /> Publicar cita</button>} />
+      <PageHeader title="Citas Célebres" subtitle="Frases que se quedan contigo después de los créditos." action={<Button onClick={() => user ? setOpen(true) : openAuth()}><Plus className="h-4 w-4" /> Publicar cita</Button>} />
       <div className="columns-1 gap-4 sm:columns-2 xl:columns-3">
         {quotes.map((q) => {
           const m = media.find((x) => x.id === q.media_id);
@@ -61,7 +64,7 @@ function Quotes() {
           <textarea className={inputCls} rows={4} placeholder="Escribe la cita…" value={form.text} onChange={(e) => setForm({ ...form, text: e.target.value })} />
           <input className={inputCls} placeholder="Minuto (hh:mm:ss, opcional)" value={form.ts} onChange={(e) => setForm({ ...form, ts: e.target.value })} />
           {err && <p className="text-xs text-destructive">{err}</p>}
-          <button className={btnPrimary}>Publicar</button>
+          <Button type="submit">Publicar</Button>
         </form>
       </Modal>
     </>

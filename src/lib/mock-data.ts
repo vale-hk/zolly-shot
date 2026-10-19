@@ -9,12 +9,12 @@ import type { Activity, MediaItem, Quote, UserMediaStatus } from "./types";
 export const GENRES = ["Drama", "Ciencia ficción", "Romance", "Terror", "Animación", "Acción", "Noir"];
 
 export const MEDIA: MediaItem[] = [
-  { id: "m1", title: "Lluvia de Neón", year: 2023, genre: "Noir", poster_url: p1, type: "movie" },
-  { id: "m2", title: "Luna Carmesí", year: 2024, genre: "Ciencia ficción", poster_url: p2, type: "movie" },
-  { id: "m3", title: "Tejados de París", year: 2019, genre: "Romance", poster_url: p3, type: "movie" },
-  { id: "m4", title: "La Cabaña del Bosque", year: 2021, genre: "Terror", poster_url: p4, type: "movie" },
-  { id: "m5", title: "El Zorro de Cristal", year: 2022, genre: "Animación", poster_url: p5, type: "movie" },
-  { id: "m6", title: "Sol Rojo", year: 2018, genre: "Acción", poster_url: p6, type: "movie" },
+  { id: "m1", title: "Lluvia de Neón", synopsis: "En una ciudad que vive bajo la lluvia, una detective encuentra una cinta que conecta una desaparición con los secretos de su pasado. Mientras las luces de neón ocultan las huellas, deberá decidir cuánto está dispuesta a perder por revelar la verdad.", director: "Elena Ríos", duration: 118, year: 2023, genre: "Noir", poster_url: p1, type: "movie" },
+  { id: "m2", title: "Luna Carmesí", synopsis: "Una astronauta recibe una señal desde una colonia abandonada en la Luna. Al regresar, descubre que la señal contiene recuerdos que todavía no ha vivido. Su búsqueda la obliga a confrontar la frontera entre memoria, tiempo y humanidad.", director: "Mateo Vidal", duration: 126, year: 2024, genre: "Ciencia ficción", poster_url: p2, type: "movie" },
+  { id: "m3", title: "Tejados de París", synopsis: "Una fotógrafa y un músico se conocen en la azotea de un edificio parisino. Durante un verano recorren la ciudad buscando una melodía perdida, sin saber que sus encuentros cambiarán el rumbo de sus vidas.", director: "Claire Moreau", duration: 104, year: 2019, genre: "Romance", poster_url: p3, type: "movie" },
+  { id: "m4", title: "La Cabaña del Bosque", synopsis: "Un grupo de amigos pasa un fin de semana en una cabaña aislada. Cuando encuentran grabaciones de sus propias conversaciones antes de haberlas pronunciado, comprenden que el bosque guarda algo más que silencio.", director: "Daniel Arce", duration: 97, year: 2021, genre: "Terror", poster_url: p4, type: "movie" },
+  { id: "m5", title: "El Zorro de Cristal", synopsis: "Un pequeño zorro descubre que su bosque está perdiendo sus colores. Junto a una niña cartógrafa, emprende una aventura para recuperar los fragmentos de un antiguo cristal y aprender qué significa proteger un hogar.", director: "Lucía Torres", duration: 92, year: 2022, genre: "Animación", poster_url: p5, type: "movie" },
+  { id: "m6", title: "Sol Rojo", synopsis: "Un guerrero regresa a su pueblo después de años de exilio y lo encuentra dividido por una antigua deuda. Para proteger a su familia, debe elegir entre la venganza y el honor antes del último amanecer.", director: "Kenji Sato", duration: 112, year: 2018, genre: "Acción", poster_url: p6, type: "movie" },
 ];
 
 export const STATUSES: UserMediaStatus[] = [
