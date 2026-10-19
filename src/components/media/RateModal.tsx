@@ -16,6 +16,7 @@ export function RateModal({ item, initial, onClose }: { item: MediaItem | null; 
         <p className="font-display text-3xl text-star">{value ? value.toFixed(1) : "—"}</p>
       </div>
       <textarea className={inputCls} rows={3} maxLength={280} placeholder="¿Qué te pareció? (opcional)" value={comment} onChange={(e) => setComment(e.target.value)} />
+      <p className="mt-2 text-xs text-muted-foreground">La calificación, reseña y tu nombre visible serán públicos. No incluyas datos personales.</p>
       <Button
         className={`${btnPrimary} mt-4 w-full`}
         disabled={!value}
