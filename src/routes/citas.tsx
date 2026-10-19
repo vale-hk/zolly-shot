@@ -56,6 +56,7 @@ function Quotes() {
         })}
       </div>
       <Modal open={open} onClose={() => setOpen(false)} title="Nueva cita">
+        <p className="mb-4 text-sm text-muted-foreground">La cita y tu nombre visible serán públicos. No incluyas datos personales.</p>
         <form onSubmit={submit} className="flex flex-col gap-3">
           <select className={inputCls} value={form.media_id} onChange={(e) => setForm({ ...form, media_id: e.target.value })}>
             <option value="">Película</option>
