@@ -17,8 +17,8 @@ export interface Store {
 // Preserve only the context identity during development updates, never user data.
 const hot = import.meta.hot;
 export const StoreContext: Context<Store | null> =
-  hot?.data.storeContext ?? createContext<Store | null>(null);
-if (hot) hot.data.storeContext = StoreContext;
+  hot?.data?.storeContext ?? createContext<Store | null>(null);
+if (hot?.data) hot.data.storeContext = StoreContext;
 
 export function useStore() {
   const store = useContext(StoreContext);
