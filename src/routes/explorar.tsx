@@ -1,0 +1,113 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { Plus, Search } from "lucide-react";
+import { useState } from "react";
+import { z } from "zod";
+import { PageHeader } from "@/components/layout/AppShell";
+import { MediaCard } from "@/components/media/MediaCard";
+import { Modal, btnPrimary, inputCls } from "@/components/ui-kit/Modal";
+import { GENRES } from "@/lib/mock-data";
+import { useStore } from "@/lib/store";
+import type { MediaStatus } from "@/lib/types";
+
+export const Route = createFileRoute("/explorar")({
+  head: () => ({
+    meta: [
+      { title: "Explorar películas · CineTrack" },
+      { name: "description", content: "Busca y filtra películas por año y género." },
+      { property: "og:title", content: "Explorar películas · CineTrack" },
+      { property: "og:description", content: "Busca y filtra películas por año y género." },
+    ],
+  }),
+  component: Explore,
+});
+
+const movieSchema = z.object({
+  title: z.string().trim().min(1, "El título es obligatorio").max(120),
+  year: z.coerce.number().int().min(1888, "Año inválido").max(new Date().getFullYear() + 2, "Año inválido"),
+  genre: z.string().min(1, "Elige un género"),
+  poster_url: z.string().trim().url("URL inválida"),
+});
+
+function Explore() {
+  const { media, statuses, setStatus } = useStore();
+  const [q, setQ] = useState("");
+  const [genre, setGenre] = useState("");
+  const [year, setYear] = useState("");
+  const [open, setOpen] = useState(false);
+  const years = [...new Set(media.map((m) => m.year))].sort((a, b) => b - a);
+  const list = media.filter((m) => m.title.toLowerCase().includes(q.toLowerCase()) && (!genre || m.genre === genre) && (!year || m.year === +year));
+
+  return (
+    <>
+      <PageHeader title="Explorar" subtitle="Encuentra tu próxima película." action={<button className={btnPrimary} onClick={() => setOpen(true)}><Plus className="h-4 w-4" /> Agregar película faltante</button>} />
+      <div className="mb-6 flex flex-wrap gap-3">
+        <div className="relative min-w-60 flex-1">
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+          <input className={`${inputCls} pl-9`} placeholder="Buscar por título…" value={q} onChange={(e) => setQ(e.target.value)} />
+        </div>
+        <select className={`${inputCls} w-auto`} value={genre} onChange={(e) => setGenre(e.target.value)}>
+          <option value="">Todos los géneros</option>
+          {GENRES.map((g) => <option key={g}>{g}</option>)}
+        </select>
+        <select className={`${inputCls} w-auto`} value={year} onChange={(e) => setYear(e.target.value)}>
+          <option value="">Todos los años</option>
+          {years.map((y) => <option key={y}>{y}</option>)}
+        </select>
+      </div>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        {list.map((m) => {
+          const s = statuses.find((x) => x.media_id === m.id);
+          return <MediaCard key={m.id} item={m} status={s?.status} rating={s?.rating} onStatus={(st) => setStatus(m.id, st)} />;
+        })}
+      </div>
+      {list.length === 0 && <p className="py-10 text-center text-muted-foreground">Sin resultados. ¿Falta alguna? Agrégala.</p>}
+      <AddMovieModal open={open} onClose={() => setOpen(false)} />
+    </>
+  );
+}
+
+function AddMovieModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { addMedia } = useStore();
+  const [form, setForm] = useState({ title: "", year: "", genre: "", poster_url: "", status: "watchlist" as MediaStatus });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const r = movieSchema.safeParse(form);
+    if (!r.success) {
+      setErrors(Object.fromEntries(r.error.issues.map((i) => [i.path[0], i.message])));
+      return;
+    }
+    addMedia({ ...r.data, type: "movie" }, form.status);
+    setForm({ title: "", year: "", genre: "", poster_url: "", status: "watchlist" });
+    setErrors({});
+    onClose();
+  };
+
+  const Err = ({ k }: { k: string }) => (errors[k] ? <p className="mt-1 text-xs text-destructive">{errors[k]}</p> : null);
+  return (
+    <Modal open={open} onClose={onClose} title="Agregar película">
+      <form onSubmit={submit} className="flex flex-col gap-3">
+        <div><input className={inputCls} placeholder="Título" value={form.title} onChange={(e) => set("title", e.target.value)} /><Err k="title" /></div>
+        <div className="grid grid-cols-2 gap-3">
+          <div><input className={inputCls} type="number" placeholder="Año" value={form.year} onChange={(e) => set("year", e.target.value)} /><Err k="year" /></div>
+          <div>
+            <select className={inputCls} value={form.genre} onChange={(e) => set("genre", e.target.value)}>
+              <option value="">Género</option>
+              {GENRES.map((g) => <option key={g}>{g}</option>)}
+            </select>
+            <Err k="genre" />
+          </div>
+        </div>
+        <div><input className={inputCls} placeholder="URL del póster (https://…)" value={form.poster_url} onChange={(e) => set("poster_url", e.target.value)} /><Err k="poster_url" /></div>
+        <select className={inputCls} value={form.status} onChange={(e) => set("status", e.target.value)}>
+          <option value="watchlist">Por ver</option>
+          <option value="watching">Viendo</option>
+          <option value="watched">Vista</option>
+        </select>
+        <button type="submit" className={`${btnPrimary} mt-2`}>Agregar</button>
+      </form>
+    </Modal>
+  );
+}
