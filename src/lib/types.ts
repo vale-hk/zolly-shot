@@ -31,8 +31,8 @@ export interface Activity {
   user: string;
   action_type: "rated" | "quoted" | "started" | "added";
   media_id: string;
-  comment?: string;
-  rating?: number;
+  comment?: string | undefined;
+  rating?: number | undefined;
   created_at: string;
 }
 

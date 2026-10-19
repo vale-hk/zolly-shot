@@ -10,7 +10,7 @@ interface Store {
   feed: Activity[];
   addMedia: (m: Omit<MediaItem, "id">, status?: MediaStatus) => void;
   setStatus: (mediaId: string, status: MediaStatus) => void;
-  rate: (mediaId: string, rating: number, comment?: string) => void;
+  rate: (mediaId: string, rating: number, comment?: string | undefined) => void;
   addQuote: (mediaId: string, text: string, timestamp: string) => void;
 }
 

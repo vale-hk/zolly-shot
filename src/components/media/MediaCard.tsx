@@ -7,8 +7,8 @@ import type { MediaItem, MediaStatus, MediaType } from "@/lib/types";
 interface Props {
   item: MediaItem;
   mediaType?: MediaType;
-  status?: MediaStatus;
-  rating?: number | null;
+  status?: MediaStatus | undefined;
+  rating?: number | null | undefined;
   onRate?: () => void;
   onStatus?: (s: MediaStatus) => void;
 }
