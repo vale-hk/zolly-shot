@@ -28,13 +28,13 @@ declare global {
 export function reportLovableError(error: unknown, context: Record<string, unknown> = {}) {
   if (typeof window === "undefined") return;
   const safeError = new Error(redactErrorText(describeThrown(error)));
-  safeError.stack = error instanceof Error && error.stack ? redactErrorText(error.stack) : undefined;
+  if (error instanceof Error && error.stack) safeError.stack = redactErrorText(error.stack);
   window.__lovableEvents?.captureException?.(
     safeError,
     {
       source: "react_error_boundary",
       route: window.location.pathname,
-      boundary: typeof context.boundary === 'string' ? redactErrorText(context.boundary) : undefined,
+      boundary: typeof context['boundary'] === 'string' ? redactErrorText(context['boundary']) : undefined,
     },
     {
       mechanism: "react_error_boundary",
