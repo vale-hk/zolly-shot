@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- App data flows through the store in src/lib/store.tsx (mock data for now); swap its internals for Lovable Cloud queries so pages stay unchanged.
+- Media components take a mediaType prop (movie|book) so books can be added without new components.
