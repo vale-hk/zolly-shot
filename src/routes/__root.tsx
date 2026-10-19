@@ -25,7 +25,7 @@ function IdentityListener() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      if (!['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED'].includes(event)) return;
+      if (!['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED', 'MFA_CHALLENGE_VERIFIED'].includes(event)) return;
       setTimeout(() => { void syncUser(session?.user ?? null); void router.invalidate(); if (event !== 'SIGNED_OUT') void queryClient.invalidateQueries(); }, 0);
     });
     return () => data.subscription.unsubscribe();

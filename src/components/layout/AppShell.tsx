@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { CalendarDays, Clapperboard, Compass, Library, Quote, Users, LogOut } from "lucide-react";
+import { CalendarDays, Clapperboard, Compass, Library, Quote, Users, LogOut, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { Button } from '@/components/ui/button';
@@ -36,12 +36,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Link>
           ))}
         </nav>
-        <div className="mt-auto border-t pt-4">{user ? <><p className="mb-2 truncate text-sm">{displayName}</p><Button variant="ghost" onClick={logout}><LogOut />Cerrar sesión</Button></> : <Button onClick={() => openAuth()}>Iniciar Sesión</Button>}</div>
+        <div className="mt-auto border-t pt-4">{user ? <><p className="mb-2 truncate text-sm">{displayName}</p><Button variant="ghost" asChild><Link to="/seguridad"><ShieldCheck />Seguridad de cuenta</Link></Button><Button variant="ghost" onClick={logout}><LogOut />Cerrar sesión</Button></> : <Button onClick={() => openAuth()}>Iniciar Sesión</Button>}<Link to="/privacidad" className="mt-3 block text-xs text-muted-foreground underline">Privacidad</Link></div>
       </aside>
 
       <header className="sticky top-0 z-40 flex items-center gap-2 border-b bg-background/80 px-4 py-3 backdrop-blur md:hidden">
         <Clapperboard className="h-6 w-6 text-primary" />
-        <span className="font-display text-xl font-semibold">CineTrack</span><div className="ml-auto">{user ? <Button variant="ghost" size="icon" aria-label="Cerrar sesión" onClick={logout}><LogOut /></Button> : <Button size="sm" onClick={() => openAuth()}>Iniciar Sesión</Button>}</div>
+        <span className="font-display text-xl font-semibold">CineTrack</span><div className="ml-auto flex">{user ? <><Button variant="ghost" size="icon" asChild><Link to="/seguridad" aria-label="Seguridad de cuenta"><ShieldCheck /></Link></Button><Button variant="ghost" size="icon" aria-label="Cerrar sesión" onClick={logout}><LogOut /></Button></> : <Button size="sm" onClick={() => openAuth()}>Iniciar Sesión</Button>}</div>
       </header>
 
       <main className="flex-1 px-4 pb-24 pt-6 md:px-10 md:pb-10 md:pt-10 min-w-0">{children}</main>
