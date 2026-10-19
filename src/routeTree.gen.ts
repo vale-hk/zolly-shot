@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CitasRouteImport } from './routes/citas'
+import { Route as ExplorarRouteImport } from './routes/explorar'
+import { Route as FeedRouteImport } from './routes/feed'
+import { Route as HabitosRouteImport } from './routes/habitos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CitasRoute = CitasRouteImport.update({
+  id: '/citas',
+  path: '/citas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExplorarRoute = ExplorarRouteImport.update({
+  id: '/explorar',
+  path: '/explorar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeedRoute = FeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabitosRoute = HabitosRouteImport.update({
+  id: '/habitos',
+  path: '/habitos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/citas': typeof CitasRoute
+  '/explorar': typeof ExplorarRoute
+  '/feed': typeof FeedRoute
+  '/habitos': typeof HabitosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/citas': typeof CitasRoute
+  '/explorar': typeof ExplorarRoute
+  '/feed': typeof FeedRoute
+  '/habitos': typeof HabitosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/citas': typeof CitasRoute
+  '/explorar': typeof ExplorarRoute
+  '/feed': typeof FeedRoute
+  '/habitos': typeof HabitosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/citas' | '/explorar' | '/feed' | '/habitos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/citas' | '/explorar' | '/feed' | '/habitos'
+  id: '__root__' | '/' | '/citas' | '/explorar' | '/feed' | '/habitos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CitasRoute: typeof CitasRoute
+  ExplorarRoute: typeof ExplorarRoute
+  FeedRoute: typeof FeedRoute
+  HabitosRoute: typeof HabitosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/citas': {
+      id: '/citas'
+      path: '/citas'
+      fullPath: '/citas'
+      preLoaderRoute: typeof CitasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explorar': {
+      id: '/explorar'
+      path: '/explorar'
+      fullPath: '/explorar'
+      preLoaderRoute: typeof ExplorarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feed': {
+      id: '/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habitos': {
+      id: '/habitos'
+      path: '/habitos'
+      fullPath: '/habitos'
+      preLoaderRoute: typeof HabitosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CitasRoute: CitasRoute,
+  ExplorarRoute: ExplorarRoute,
+  FeedRoute: FeedRoute,
+  HabitosRoute: HabitosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

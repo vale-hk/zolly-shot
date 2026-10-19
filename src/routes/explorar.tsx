@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus, Search } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { z } from "zod";
 import { PageHeader } from "@/components/layout/AppShell";
 import { MediaCard } from "@/components/media/MediaCard";
@@ -72,7 +72,7 @@ function AddMovieModal({ open, onClose }: { open: boolean; onClose: () => void }
   const [errors, setErrors] = useState<Record<string, string>>({});
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
-  const submit = (e: React.FormEvent) => {
+  const submit = (e: FormEvent) => {
     e.preventDefault();
     const r = movieSchema.safeParse(form);
     if (!r.success) {

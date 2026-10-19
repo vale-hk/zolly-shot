@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus, Quote as QuoteIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { PageHeader } from "@/components/layout/AppShell";
 import { Modal, btnPrimary, inputCls } from "@/components/ui-kit/Modal";
 import { useStore } from "@/lib/store";
@@ -23,7 +23,7 @@ function Quotes() {
   const [form, setForm] = useState({ media_id: "", text: "", ts: "" });
   const [err, setErr] = useState("");
 
-  const submit = (e: React.FormEvent) => {
+  const submit = (e: FormEvent) => {
     e.preventDefault();
     if (!form.media_id) return setErr("Elige una película");
     if (form.text.trim().length < 3 || form.text.length > 300) return setErr("La cita debe tener entre 3 y 300 caracteres");
