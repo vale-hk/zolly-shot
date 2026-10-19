@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { FEED, MEDIA, QUOTES } from './mock-data';
 import { saveOnce } from './library-rules';
+import { supabase as authClient } from '@/integrations/supabase/client';
 import type { Activity, MediaItem, MediaStatus, Quote, UserMediaStatus } from './types';
 import { StoreContext, type Store } from './store-context';
 export { useStore } from './store-context';
@@ -25,10 +26,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const revision = ++syncRevision.current;
     identity.current = next?.id ?? null; setUser(next); replaceStatuses([]); setLoading(true);
     const id = next?.id ?? null;
-    if (next) setAuthMode(null);
+    if (next) {
+      const { data, error } = await authClient.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (identity.current !== id || syncRevision.current !== revision) return;
+      if (error || (data?.nextLevel === 'aal2' && data.currentLevel !== 'aal2')) {
+        setAuthMode('login'); setLoading(false); return;
+      }
+      setAuthMode(null);
+    }
     const [catalog, qs, activities, library, profile] = await Promise.all([
-      supabase.from('media_items').select('*'), supabase.from('quotes').select('*').order('created_at', { ascending: false }).limit(100),
-      supabase.from('activity_feed').select('*').order('created_at', { ascending: false }).limit(100),
+      supabase.from('media_items').select('id,title,year,genre,poster_url,type,synopsis,director,duration'), supabase.from('quotes').select('id,media_id,quote_text,timestamp,display_name,created_at').order('created_at', { ascending: false }).limit(100),
+      supabase.from('activity_feed').select('id,media_id,action_type,comment,rating,display_name,created_at').order('created_at', { ascending: false }).limit(100),
       next ? supabase.from('user_media_status').select('*').eq('user_id', next.id) : Promise.resolve({ data: [], error: null }),
       next ? supabase.from('profiles').select('display_name').eq('id', next.id).maybeSingle() : Promise.resolve({ data: null, error: null }),
     ]);
@@ -54,7 +62,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   };
   const post = async (action_type: Activity['action_type'], media_id: string, comment?: string, rating?: number) => {
     if (!user) return;
-    const { data, error } = await supabase.from('activity_feed').insert({ user_id: user.id, media_id, action_type, comment: comment ?? null, rating: rating ?? null, display_name: displayName }).select().single();
+    const { data, error } = await supabase.from('activity_feed').insert({ user_id: user.id, media_id, action_type, comment: comment ?? null, rating: rating ?? null, display_name: displayName }).select('id').single();
     if (error) { toast.error('Tu actividad no se pudo publicar.'); return; }
     setFeed(f => [{ id: data.id, user: displayName, media_id, action_type, comment, rating, created_at: 'ahora' }, ...f]);
   };
@@ -66,7 +74,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     replaceStatuses([...previous.filter(s => s.media_id !== mediaId), row]);
     const { error } = await supabase.from('user_media_status').upsert({ ...row, user_id: user.id }, { onConflict: 'user_id,media_id' });
     if (error) { replaceStatuses(previous); toast.error('No se pudo guardar el cambio.'); return false; }
-    if (status === 'watching') await post('started', mediaId);
     return true;
   };
   const saveToWatchlist = async (id: string) => {
@@ -85,14 +92,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       if (!signedIn() || !user) return;
       const duplicate = media.find(x => x.title.trim().toLowerCase() === m.title.trim().toLowerCase() && x.year === m.year);
       if (duplicate) { await saveToWatchlist(duplicate.id); return; }
-      const { data, error } = await supabase.from('media_items').insert({ ...m, synopsis: m.synopsis ?? null, director: m.director ?? null, duration: m.duration ?? null, owner_id: user.id }).select().single();
+      const { data, error } = await supabase.from('media_items').insert({ ...m, synopsis: m.synopsis ?? null, director: m.director ?? null, duration: m.duration ?? null, owner_id: user.id }).select('id').single();
       if (error) { toast.error('No se pudo agregar la película.'); return; }
-      setMedia(rows => [{ ...m, id: data.id }, ...rows]); await setStatus(data.id, status); await post('added', data.id);
+      setMedia(rows => [{ ...m, id: data.id }, ...rows]); await setStatus(data.id, status);
     },
     rate: async (id, rating, comment) => { if (!signedIn()) return; if (await setStatus(id, 'watched', rating)) await post('rated', id, comment, rating); },
     addQuote: async (media_id, quote_text, timestamp) => {
       if (!signedIn() || !user) return;
-      const { data, error } = await supabase.from('quotes').insert({ user_id: user.id, media_id, quote_text, timestamp, display_name: displayName }).select().single();
+      const { data, error } = await supabase.from('quotes').insert({ user_id: user.id, media_id, quote_text, timestamp, display_name: displayName }).select('id').single();
       if (error) { toast.error('No se pudo guardar la cita.'); return; }
       setQuotes(q => [{ id: data.id, user: displayName, media_id, quote_text, timestamp }, ...q]); await post('quoted', media_id, quote_text);
     },
