@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Eye, Play, Bookmark, Star } from "lucide-react";
 import { RatingStars } from "./RatingStars";
 import { ItemStatusBadge } from "./ItemStatusBadge";
@@ -43,7 +44,7 @@ export function MediaCard({ item, mediaType = item.type, status, rating, onRate,
   );
 }
 
-function IconBtn({ label, onClick, children }: { label: string; onClick: () => void; children: React.ReactNode }) {
+function IconBtn({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
   return (
     <button title={label} aria-label={label} onClick={onClick} className="rounded-full bg-background/70 p-2 text-foreground backdrop-blur transition hover:bg-primary hover:text-primary-foreground">
       {children}
