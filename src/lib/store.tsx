@@ -54,7 +54,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const revision = syncRevision.current;
     void supabase.auth.getUser().then(({ data }) => {
-      if (syncRevision.current === revision) return syncUser(data.user);
+      if (syncRevision.current === revision) void syncUser(data.user);
     });
   }, []);
   const signedIn = () => {
