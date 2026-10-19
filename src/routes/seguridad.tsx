@@ -35,7 +35,7 @@ function SecurityPage() {
   const enroll = () => run(async () => {
     const factors = await supabase.auth.mfa.listFactors();
     if (factors.error) { setMessage('No se pudo consultar la verificación.'); return; }
-    for (const f of factors.data.totp.filter(f => f.status === 'unverified')) {
+    for (const f of factors.data.all.filter(f => f.factor_type === 'totp' && f.status === 'unverified')) {
       const { error } = await supabase.auth.mfa.unenroll({ factorId: f.id });
       if (error) { setMessage('No se pudo reiniciar la configuración.'); return; }
     }
