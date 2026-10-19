@@ -26,11 +26,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [feed, setFeed] = useState<Activity[]>(FEED);
   const [user, setUser] = useState<User | null>(null);
   const identity = useRef<string | null>(null);
+  const syncRevision = useRef(0);
   const [displayName, setDisplayName] = useState('Cinéfilo');
   const [loading, setLoading] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'signup' | null>(null);
   const replaceStatuses = (rows: UserMediaStatus[]) => { statusesRef.current = rows; setStatuses(rows); };
   const syncUser = async (next: User | null) => {
+    const revision = ++syncRevision.current;
     identity.current = next?.id ?? null; setUser(next); replaceStatuses([]); setLoading(true);
     const id = next?.id ?? null;
     if (next) setAuthMode(null);
@@ -40,7 +42,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       next ? supabase.from('user_media_status').select('*').eq('user_id', next.id) : Promise.resolve({ data: [], error: null }),
       next ? supabase.from('profiles').select('display_name').eq('id', next.id).maybeSingle() : Promise.resolve({ data: null, error: null }),
     ]);
-    if (identity.current !== id) return;
+    if (identity.current !== id || syncRevision.current !== revision) return;
     const err = catalog.error || qs.error || activities.error || library.error || profile.error;
     if (err) toast.error('No pudimos cargar tus datos. Intenta nuevamente.');
     setMedia([...MEDIA, ...(catalog.data ?? []).map(m => ({ ...m, type: m.type as MediaItem['type'], synopsis: m.synopsis ?? undefined, director: m.director ?? undefined, duration: m.duration ?? undefined }))]);
@@ -49,8 +51,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     replaceStatuses((library.data ?? []).map(s => ({ ...s, status: s.status as MediaStatus })));
     setDisplayName(profile.data?.display_name ?? 'Cinéfilo'); setLoading(false);
   };
-  useEffect(() => { void supabase.auth.getUser().then(({ data }) => syncUser(data.user)); }, []);
-  const signedIn = () => { if (user) return true; setAuthMode('login'); return false; };
+  useEffect(() => {
+    const revision = syncRevision.current;
+    void supabase.auth.getUser().then(({ data }) => {
+      if (syncRevision.current === revision) return syncUser(data.user);
+    });
+  }, []);
+  const signedIn = () => {
+    if (loading) { toast('Un momento, estamos cargando tu biblioteca.'); return false; }
+    if (user) return true;
+    setAuthMode('login'); return false;
+  };
   const post = async (action_type: Activity['action_type'], media_id: string, comment?: string, rating?: number) => {
     if (!user) return;
     const { data, error } = await supabase.from('activity_feed').insert({ user_id: user.id, media_id, action_type, comment: comment ?? null, rating: rating ?? null, display_name: displayName }).select().single();
