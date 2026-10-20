@@ -12,7 +12,7 @@ import { useQueryClient } from '@tanstack/react-query';
 const NAV = [
   { to: "/", label: "Inicio", short: "Inicio", icon: LayoutDashboard },
   { to: "/filmoteca", label: "Filmoteca", short: "Filmoteca", icon: Clapperboard },
-  { to: "/habitos", label: "Hábitos", short: "Hábitos", icon: CalendarDays },
+  { to: "/mi-ritmo", label: "Mi ritmo", short: "Mi ritmo", icon: CalendarDays },
   { to: "/citas", label: "Diario personal", short: "Diario", icon: NotebookPen },
   { to: "/feed", label: "Comunidad cinéfila", short: "Comunidad", icon: Users },
   { to: "/explorar", label: "Catálogo de cine", short: "Catálogo", icon: Compass },

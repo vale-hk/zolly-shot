@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 import { useStore } from '@/lib/store';
 import { inPeriod } from '@/lib/library-rules';
 import { cn } from '@/lib/utils';
-export const Route = createFileRoute('/habitos')({ head: () => ({ meta: [
-  { title: 'Hábitos de cine · Zolly Shot' }, { name: 'description', content: 'Tus películas vistas esta semana, este mes y este año.' },
-  { property: 'og:title', content: 'Hábitos de cine · Zolly Shot' }, { property: 'og:description', content: 'Tus películas vistas esta semana, este mes y este año.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' },
+export const Route = createFileRoute('/mi-ritmo')({ head: () => ({ meta: [
+  { title: 'Mi ritmo · Zolly Shot' }, { name: 'description', content: 'Tus películas vistas esta semana, este mes y este año.' },
+  { property: 'og:title', content: 'Mi ritmo · Zolly Shot' }, { property: 'og:description', content: 'Tus películas vistas esta semana, este mes y este año.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' },
 ] }), component: Habits });
 const periods = [{ id: 'week', label: 'Esta Semana' }, { id: 'month', label: 'Este Mes' }, { id: 'year', label: 'Este Año' }] as const;
 function Habits() {
@@ -23,7 +23,7 @@ function Habits() {
   const key = (d: number) => `${month.getFullYear()}-${String(month.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
   const yearCount = watched.filter(s => inPeriod(dateOf(s), 'year', now)).length;
   const rated = watched.filter(s => s.rating != null); const average = rated.length ? rated.reduce((sum,s) => sum+(s.rating ?? 0),0)/rated.length : 0;
-  return <><PageHeader title="Hábitos" subtitle="Un momento para cada historia." />
+  return <><PageHeader title="Mi ritmo" subtitle="Un momento para cada historia." />
     {!user && <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-y py-4"><p className="text-muted-foreground">Tu calendario de cine comienza con tu cuenta.</p><Button onClick={() => openAuth()}>Iniciar Sesión</Button></div>}
     <div className="mb-8 grid grid-cols-3 gap-4 border-y py-5">{[{ icon: Film, label: 'Vistas este año', value: yearCount }, { icon: Star, label: 'Calificación media', value: average.toFixed(1) }, { icon: CalendarDays, label: 'Días de cine', value: new Set(watched.map(dateOf)).size }].map(({ icon: Icon, label, value }) => <div key={label}><Icon className="mb-3 h-5 w-5 text-star" /><p className="font-display text-3xl">{value}</p><p className="mt-1 text-xs text-muted-foreground">{label}</p></div>)}</div>
     <div className="grid gap-10 xl:grid-cols-[1fr_320px]"><div>{periods.map(period => {
