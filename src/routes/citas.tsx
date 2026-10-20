@@ -44,7 +44,7 @@ function Quotes() {
         {quotes.map((q) => {
           const m = media.find((x) => x.id === q.media_id);
           return (
-            <figure key={q.id} className="relative mb-4 break-inside-avoid overflow-hidden rounded-2xl border bg-card">
+            <figure key={q.id} className="relative mb-4 break-inside-avoid overflow-hidden frame-imax">
               {m && <img src={m.poster_url} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover opacity-15" />}
               <div className="relative p-6">
                 <QuoteIcon className="mb-3 h-6 w-6 text-primary" />
