@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as CitasRouteImport } from './routes/citas'
 import { Route as ExplorarRouteImport } from './routes/explorar'
 import { Route as FeedRouteImport } from './routes/feed'
@@ -18,6 +19,11 @@ import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SeguridadRouteImport } from './routes/seguridad'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CitasRoute = CitasRouteImport.update({
   id: '/citas',
   path: '/citas',
@@ -60,6 +66,7 @@ const SeguridadRoute = SeguridadRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/seguridad': typeof SeguridadRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
@@ -81,6 +89,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
@@ -93,6 +102,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/citas'
     | '/explorar'
     | '/feed'
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
     | '/seguridad'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/citas'
     | '/explorar'
     | '/feed'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/seguridad'
   id:
     | '__root__'
+    | '/'
     | '/citas'
     | '/explorar'
     | '/feed'
@@ -124,6 +136,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   CitasRoute: typeof CitasRoute
   ExplorarRoute: typeof ExplorarRoute
   FeedRoute: typeof FeedRoute
@@ -136,6 +149,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/citas': {
       id: '/citas'
       path: '/citas'
@@ -196,6 +216,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   CitasRoute: CitasRoute,
   ExplorarRoute: ExplorarRoute,
   FeedRoute: FeedRoute,
