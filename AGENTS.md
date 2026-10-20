@@ -18,3 +18,4 @@
 - Public reads use column-level grants and explicit projections excluding ownership identifiers; private reads and writes enforce owner RLS and MFA assurance in the database, not just the interface.
 - Account security remains on managed browser authentication; authenticator enrollment and verification use the managed SDK and the root identity listener handles MFA transitions.
 - Defensive headers run through request middleware; strict script CSP and HttpOnly sessions require a compatible authentication/rendering migration rather than a second parallel session.
+- Browser auth regression tests use synthetic provider responses; real email confirmation is verified separately with a human-controlled inbox, never admin confirmation or retained credentials.
