@@ -25,7 +25,8 @@ export function NotificationBell() {
     setSeen(localStorage.getItem(SEEN) ?? '');
     void load();
     const timer = setInterval(load, 30000);
-    const ch = supabase.channel(`notes-${user.id}`).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'post_comments' }, () => void load()).subscribe();
+    // Unique name per mount: several bells (sidebar + header) and StrictMode remounts must not reuse a subscribed channel.
+    const ch = supabase.channel(`notes-${user.id}-${crypto.randomUUID()}`).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'post_comments' }, () => void load()).subscribe();
     return () => { clearInterval(timer); void supabase.removeChannel(ch); };
   }, [user, load]);
   if (!user) return null;
