@@ -55,7 +55,7 @@ export async function authFixture(page: Page) {
 }
 
 export async function openSignup(page: Page) {
-  await page.goto('/');
+  await page.goto('/', { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: 'Registrarse', exact: true }).first().click();
   const dialog = page.getByRole('dialog');
   await dialog.getByLabel('Nombre visible').fill('Cuenta de prueba');

@@ -60,7 +60,7 @@ test('connection failure is safe and does not leave signup disabled', async ({ p
 
 test('login hides account existence and provider details', async ({ page }) => {
   await authFixture(page);
-  await page.goto('/');
+  await page.goto('/', { waitUntil: 'networkidle' });
   const dialog = await openLogin(page);
   await page.route('**/auth/v1/token**', route => route.fulfill({ status: 400, json: { code: 'invalid_credentials', msg: 'INTERNAL_ONLY user exists password=private-value' } }));
   await dialog.getByRole('button', { name: 'Iniciar Sesión', exact: true }).click();
