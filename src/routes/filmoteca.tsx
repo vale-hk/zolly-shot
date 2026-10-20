@@ -9,15 +9,15 @@ import { useStore } from "@/lib/store";
 import { STATUS_LABELS, type MediaItem, type MediaStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/filmoteca")({
   head: () => ({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Zolly Shot · Tu diario cinematográfico" },
-      { name: "description", content: "Tus películas vistas, en curso y por ver, con calificaciones." },
-      { property: "og:title", content: "Zolly Shot · Tu diario cinematográfico" },
-      { property: "og:description", content: "Tus películas vistas, en curso y por ver, con calificaciones." },
+      { title: "Mi Filmoteca · Zolly Shot" },
+      { name: "description", content: "Tus películas vistas, en curso y por ver en Zolly Shot." },
+      { property: "og:title", content: "Mi Filmoteca · Zolly Shot" },
+      { property: "og:description", content: "Tus películas vistas, en curso y por ver en Zolly Shot." },
     ],
   }),
   component: Library,
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/")({
 const TABS: MediaStatus[] = ["watched", "watching", "watchlist"];
 
 function Library() {
-  const { media, statuses, setStatus, user, loading } = useStore();
+  const { media, statuses, setStatus, user, loading, openAuth } = useStore();
   const [tab, setTab] = useState<MediaStatus>("watched");
   const [rating, setRating] = useState<MediaItem | null>(null);
 
@@ -34,7 +34,7 @@ function Library() {
   const rated = statuses.filter((s) => s.rating != null);
   const avg = rated.length ? rated.reduce((a, s) => a + (s.rating ?? 0), 0) / rated.length : 0;
 
-  if (!user) return <><CameraHeader landing /><section className="mx-auto max-w-7xl px-6 py-8 md:px-10"><div className="mb-6 flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs uppercase text-star">Próxima función</p><h2 className="mt-2 text-3xl">Historias por descubrir</h2></div><Button variant="link" asChild><Link to="/explorar">Explorar catálogo →</Link></Button></div><p className="mb-6 text-sm text-muted-foreground">Selección de demostración · Películas y fichas ficticias</p><div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">{media.slice(0,6).map(item => <MediaCard key={item.id} item={item} />)}</div></section></>;
+  if (!user) return <div className="mx-auto max-w-md py-20 text-center"><h1 className="text-4xl">Tu Filmoteca</h1><p className="mt-3 text-muted-foreground">Inicia sesión para guardar tus películas.</p><Button className="mt-6" onClick={() => openAuth('login')}>Iniciar Sesión</Button></div>;
   return (
     <>
       <div className="-mx-4 -mt-6 mb-8 md:-mx-10 md:-mt-10"><CameraHeader /></div>
@@ -60,7 +60,7 @@ function Library() {
       </div>
 
       {rows.length === 0 ? (
-        <p className="rounded-xl border border-dashed p-10 text-center text-muted-foreground">{loading ? "Cargando tu Filmoteca…" : "Nada por aquí todavía. Encuentra una película en Explorar."}</p>
+        <p className="rounded-xl border border-dashed p-10 text-center text-muted-foreground">{loading ? "Cargando tu Filmoteca…" : "Nada por aquí todavía. Encuentra una película en el Catálogo de cine."}</p>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {rows.map(({ s, item }) => (
