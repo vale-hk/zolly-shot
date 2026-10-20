@@ -6,7 +6,7 @@
 
 @theme inline {
   --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Manrope", system-ui, sans-serif;
+  --font-sans: "Fraunces", Georgia, serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -109,8 +109,8 @@
 .camera-hero { position: relative; overflow: hidden; min-height: 380px; display: flex; align-items: center; }
 .camera-hero { --dolly: 0; }
 .camera-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: transform; }
-.camera-hero > .dolly-bg { filter: blur(6px) saturate(.7) brightness(.55); transform: scale(calc(1.15 + var(--dolly) * .6)); animation: dolly-bg 2.6s ease-out both; }
-.camera-hero > .dolly-fg { -webkit-mask-image: radial-gradient(ellipse 55% 70% at 68% 50%, #000 55%, transparent 80%); mask-image: radial-gradient(ellipse 55% 70% at 68% 50%, #000 55%, transparent 80%); transform: scale(calc(1 - var(--dolly) * .22)) translateY(calc(var(--dolly) * 40px)); animation: dolly-fg 2.6s ease-out both; }
+.camera-hero > .dolly-bg { filter: blur(6px) saturate(.7) brightness(.55); }
+.camera-hero > .dolly-fg { -webkit-mask-image: radial-gradient(ellipse 55% 70% at 68% 50%, #000 55%, transparent 80%); mask-image: radial-gradient(ellipse 55% 70% at 68% 50%, #000 55%, transparent 80%); }
 @keyframes dolly-bg { from { transform: scale(1.6); } }
 @keyframes dolly-fg { from { transform: scale(.82); } }
 .zolly-logo { display: inline-flex; align-items: center; gap: .45em; font-family: var(--font-display); font-weight: 600; line-height: 1; }
@@ -155,3 +155,6 @@ progress::-moz-progress-bar { background: var(--star); }
 .compact-hero { min-height: 190px !important; }
 .compact-hero .hero-content { padding-block: 28px; }
 @layer base { h4, h5, h6, legend, [data-slot=card-title], [role=tab], button { font-family: var(--font-display); } }
+
+/* Brand capitals: initial letters of titles and menus get the metallic Zolly treatment. */
+h1::first-letter, h2::first-letter, h3::first-letter, nav a::first-letter, .cap-accent::first-letter { font-weight: 700; letter-spacing: .06em; background: linear-gradient(180deg, var(--star), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
