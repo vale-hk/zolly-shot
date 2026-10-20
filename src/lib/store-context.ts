@@ -2,7 +2,10 @@ import { createContext, useContext, type Context } from 'react';
 import type { User } from '@supabase/supabase-js';
 import type { Activity, MediaItem, MediaStatus, PostComment, Quote, UserMediaStatus } from './types';
 
+export type IdeaArea = 'guion' | 'produccion' | 'montaje' | 'analisis';
+export interface Idea { id: string; area: IdeaArea; media_id: string | null; title: string; body: string; created_at: string }
 export interface Store {
+  ideas: Idea[]; addIdea: (i: Omit<Idea, 'id' | 'created_at'>) => Promise<boolean>; removeIdea: (id: string) => Promise<void>;
   media: MediaItem[]; statuses: UserMediaStatus[]; quotes: Quote[]; feed: Activity[];
   user: User | null; displayName: string; loading: boolean; authMode: 'login' | 'signup' | null;
   openAuth: (mode?: 'login' | 'signup') => void; closeAuth: () => void;

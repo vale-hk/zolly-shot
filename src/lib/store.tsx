@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { FEED, MEDIA, QUOTES } from './mock-data';
 import { saveOnce } from './library-rules';
 import type { Activity, MediaItem, MediaStatus, PostComment, Quote, UserMediaStatus } from './types';
-import { StoreContext, type Store } from './store-context';
+import { StoreContext, type Idea, type Store } from './store-context';
 export { useStore } from './store-context';
 const today = () => new Date().toLocaleDateString('en-CA');
 export function StoreProvider({ children }: { children: ReactNode }) {
@@ -22,12 +22,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
   const [myLikes, setMyLikes] = useState<string[]>([]);
   const [comments, setComments] = useState<PostComment[]>([]);
+  const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'signup' | null>(null);
   const replaceStatuses = (rows: UserMediaStatus[]) => { statusesRef.current = rows; setStatuses(rows); };
   const syncUser = async (next: User | null) => {
     const revision = ++syncRevision.current;
-    identity.current = next?.id ?? null; setUser(next); replaceStatuses([]); setLoading(true);
+    identity.current = next?.id ?? null; setUser(next); replaceStatuses([]); setIdeas([]); setLoading(true);
     const id = next?.id ?? null;
     if (next) {
       const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
@@ -37,7 +38,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       }
       setAuthMode(null);
     }
-    const [catalog, qs, activities, library, profile, cms, counts, mine] = await Promise.all([
+    const [catalog, qs, activities, library, profile, cms, counts, mine, ids] = await Promise.all([
       supabase.from('media_items').select('id,title,year,genre,poster_url,type,synopsis,director,duration,based_on'), supabase.from('quotes').select('id,media_id,quote_text,timestamp,display_name,created_at').order('created_at', { ascending: false }).limit(100),
       supabase.from('activity_feed').select('id,media_id,action_type,comment,rating,display_name,created_at').order('created_at', { ascending: false }).limit(100),
       next ? supabase.from('user_media_status').select('*').eq('user_id', next.id) : Promise.resolve({ data: [], error: null }),
@@ -45,6 +46,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       supabase.from('post_comments').select('id,activity_id,display_name,body,created_at').order('created_at').limit(500),
       supabase.rpc('post_like_counts'),
       next ? supabase.from('post_likes').select('activity_id').eq('user_id', next.id) : Promise.resolve({ data: [], error: null }),
+      next ? supabase.from('user_ideas').select('id,area,media_id,title,body,created_at').eq('user_id', next.id).order('created_at', { ascending: false }) : Promise.resolve({ data: [], error: null }),
     ]);
     if (identity.current !== id || syncRevision.current !== revision) return;
     const err = catalog.error || qs.error || activities.error || library.error || profile.error;
@@ -56,7 +58,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setDisplayName(profile.data?.display_name ?? 'Cinéfilo'); setPseudonym(profile.data?.pseudonym ?? null);
     setComments((cms.data ?? []).map(c => ({ ...c, created_at: new Date(c.created_at).toLocaleDateString('es-CL') })));
     setLikeCounts(Object.fromEntries((counts.data ?? []).map(c => [c.activity_id, Number(c.likes)])));
-    setMyLikes((mine.data ?? []).map(l => l.activity_id)); setLoading(false);
+    setMyLikes((mine.data ?? []).map(l => l.activity_id)); setIdeas((ids.data ?? []) as Idea[]); setLoading(false);
   };
   useEffect(() => {
     const revision = syncRevision.current;
@@ -122,7 +124,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (error) { toast.error('No se pudo publicar tu comentario.'); return false; }
     setComments(c => [...c, { id: data.id, activity_id: activityId, display_name: displayName, body: body.trim(), created_at: 'ahora' }]); return true;
   };
-  const store: Store = { media, statuses, quotes, feed, user, loading, displayName, authMode, pseudonym, likeCounts, myLikes, comments, removeFromList, updateProfile, toggleLike, addComment,
+  const addIdea: Store['addIdea'] = async (i) => {
+    if (!signedIn() || !user) return false;
+    const { data, error } = await supabase.from('user_ideas').insert({ ...i, user_id: user.id }).select('id,area,media_id,title,body,created_at').single();
+    if (error) { toast.error('No se pudo guardar tu idea.'); return false; }
+    setIdeas(x => [data as Idea, ...x]); toast.success('Idea guardada en tu diario privado'); return true;
+  };
+  const removeIdea = async (id: string) => {
+    if (!user) return;
+    const { error } = await supabase.from('user_ideas').delete().eq('id', id).eq('user_id', user.id);
+    if (error) toast.error('No se pudo eliminar la idea.'); else setIdeas(x => x.filter(i => i.id !== id));
+  };
+  const store: Store = { ideas, addIdea, removeIdea, media, statuses, quotes, feed, user, loading, displayName, authMode, pseudonym, likeCounts, myLikes, comments, removeFromList, updateProfile, toggleLike, addComment,
     openAuth: (mode = 'login') => setAuthMode(mode), closeAuth: () => setAuthMode(null), syncUser, setStatus, saveToWatchlist,
     addMedia: async (m, status = 'watchlist') => {
       if (!signedIn() || !user) return;
