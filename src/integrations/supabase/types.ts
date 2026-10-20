@@ -49,6 +49,7 @@ export type Database = {
       }
       media_items: {
         Row: {
+          based_on: string | null
           director: string | null
           duration: number | null
           genre: string
@@ -61,6 +62,7 @@ export type Database = {
           year: number
         }
         Insert: {
+          based_on?: string | null
           director?: string | null
           duration?: number | null
           genre: string
@@ -73,6 +75,7 @@ export type Database = {
           year: number
         }
         Update: {
+          based_on?: string | null
           director?: string | null
           duration?: number | null
           genre?: string
@@ -86,21 +89,69 @@ export type Database = {
         }
         Relationships: []
       }
+      post_comments: {
+        Row: {
+          activity_id: string
+          body: string
+          created_at: string
+          display_name: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activity_id: string
+          body: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          user_id?: string
+        }
+        Update: {
+          activity_id?: string
+          body?: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      post_likes: {
+        Row: {
+          activity_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          user_id?: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           display_name: string
           id: string
+          pseudonym: string | null
         }
         Insert: {
           avatar_url?: string | null
           display_name?: string
           id: string
+          pseudonym?: string | null
         }
         Update: {
           avatar_url?: string | null
           display_name?: string
           id?: string
+          pseudonym?: string | null
         }
         Relationships: []
       }
@@ -167,6 +218,13 @@ export type Database = {
     }
     Functions: {
       cinetrack_assurance_ok: { Args: never; Returns: boolean }
+      post_like_counts: {
+        Args: never
+        Returns: {
+          activity_id: string
+          likes: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

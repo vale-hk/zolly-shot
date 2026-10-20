@@ -22,6 +22,13 @@
       "when": 1792447578918,
       "tag": "0002_least_privilege_private_records",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792504767519,
+      "tag": "0003_zolly_profile_social_adaptations",
+      "breakpoints": true
     }
   ]
 }
