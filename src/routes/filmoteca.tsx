@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { CameraHeader } from '@/components/layout/CameraHeader';
 import { Button } from '@/components/ui/button';
-import { Link } from '@tanstack/react-router';
 import { MediaCard } from "@/components/media/MediaCard";
 import { RateModal } from "@/components/media/RateModal";
 import { useStore } from "@/lib/store";

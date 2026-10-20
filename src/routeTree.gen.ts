@@ -9,20 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as CitasRouteImport } from './routes/citas'
 import { Route as ExplorarRouteImport } from './routes/explorar'
 import { Route as FeedRouteImport } from './routes/feed'
+import { Route as FilmotecaRouteImport } from './routes/filmoteca'
 import { Route as HabitosRouteImport } from './routes/habitos'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SeguridadRouteImport } from './routes/seguridad'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CitasRoute = CitasRouteImport.update({
   id: '/citas',
   path: '/citas',
@@ -36,6 +31,11 @@ const ExplorarRoute = ExplorarRouteImport.update({
 const FeedRoute = FeedRouteImport.update({
   id: '/feed',
   path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FilmotecaRoute = FilmotecaRouteImport.update({
+  id: '/filmoteca',
+  path: '/filmoteca',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HabitosRoute = HabitosRouteImport.update({
@@ -60,20 +60,20 @@ const SeguridadRoute = SeguridadRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
+  '/filmoteca': typeof FilmotecaRoute
   '/habitos': typeof HabitosRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
   '/seguridad': typeof SeguridadRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
+  '/filmoteca': typeof FilmotecaRoute
   '/habitos': typeof HabitosRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -81,10 +81,10 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
+  '/filmoteca': typeof FilmotecaRoute
   '/habitos': typeof HabitosRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -93,30 +93,30 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/citas'
     | '/explorar'
     | '/feed'
+    | '/filmoteca'
     | '/habitos'
     | '/privacidad'
     | '/reset-password'
     | '/seguridad'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/citas'
     | '/explorar'
     | '/feed'
+    | '/filmoteca'
     | '/habitos'
     | '/privacidad'
     | '/reset-password'
     | '/seguridad'
   id:
     | '__root__'
-    | '/'
     | '/citas'
     | '/explorar'
     | '/feed'
+    | '/filmoteca'
     | '/habitos'
     | '/privacidad'
     | '/reset-password'
@@ -124,10 +124,10 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   CitasRoute: typeof CitasRoute
   ExplorarRoute: typeof ExplorarRoute
   FeedRoute: typeof FeedRoute
+  FilmotecaRoute: typeof FilmotecaRoute
   HabitosRoute: typeof HabitosRoute
   PrivacidadRoute: typeof PrivacidadRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -136,13 +136,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/citas': {
       id: '/citas'
       path: '/citas'
@@ -162,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/feed'
       fullPath: '/feed'
       preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/filmoteca': {
+      id: '/filmoteca'
+      path: '/filmoteca'
+      fullPath: '/filmoteca'
+      preLoaderRoute: typeof FilmotecaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/habitos': {
@@ -196,10 +196,10 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   CitasRoute: CitasRoute,
   ExplorarRoute: ExplorarRoute,
   FeedRoute: FeedRoute,
+  FilmotecaRoute: FilmotecaRoute,
   HabitosRoute: HabitosRoute,
   PrivacidadRoute: PrivacidadRoute,
   ResetPasswordRoute: ResetPasswordRoute,
