@@ -47,6 +47,7 @@ export async function authFixture(page: Page) {
     async confirmInBrowser() {
       confirmed = true;
       const values = new URLSearchParams({ access_token: token(), refresh_token: 'synthetic-refresh-token', expires_in: '3600', token_type: 'bearer', type: 'signup' });
+      await page.goto('about:blank');
       await page.goto(`/#${values}`);
       await expect(page.getByRole('button', { name: 'Cerrar sesión', exact: true })).toBeVisible();
       await expect.poll(() => new URL(page.url()).hash).toBe('');
