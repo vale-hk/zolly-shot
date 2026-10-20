@@ -29,6 +29,13 @@
       "when": 1792504767519,
       "tag": "0003_zolly_profile_social_adaptations",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792506923591,
+      "tag": "0004_ideas_and_notifications",
+      "breakpoints": true
     }
   ]
 }

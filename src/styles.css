@@ -114,8 +114,8 @@
 @keyframes dolly-bg { from { transform: scale(1.6); } }
 @keyframes dolly-fg { from { transform: scale(.82); } }
 .zolly-logo { display: inline-flex; align-items: center; gap: .45em; font-family: var(--font-display); font-weight: 600; line-height: 1; }
-.zolly-badge { display: grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: .35em; background: var(--primary); color: var(--primary-foreground); box-shadow: inset 0 1px 0 oklch(1 0 0 / 30%), 0 6px 18px -6px var(--primary); }
-.zolly-badge svg { width: .9em; height: .9em; }
+
+
 .zolly-word { background: linear-gradient(180deg, oklch(0.97 0.01 80) 0%, oklch(0.78 0.03 80) 45%, oklch(0.55 0.02 70) 52%, oklch(0.9 0.05 80) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -.02em; }
 .zolly-cap { position: relative; display: inline-block; font-style: italic; background: linear-gradient(180deg, var(--star), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 1.18em; margin-right: -.04em; }
 .zolly-cap::after { content: ''; position: absolute; left: -.05em; right: -.05em; bottom: .02em; height: .14em; background: repeating-linear-gradient(90deg, var(--star) 0 .12em, transparent .12em .22em); opacity: .8; }
@@ -142,3 +142,16 @@ progress::-moz-progress-bar { background: var(--star); }
 }
 @media (max-width: 400px) { .hero-title { font-size: 46px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } .camera-hero > img { transform: none !important; } }
+/* Cinematic containers: IMAX-curved frame with a camera-body notch, perforated filmstrip panels. */
+.film-frame, .frame-imax { border-radius: 18px 18px 18px 18px / 10px 10px 10px 10px; box-shadow: inset 0 0 0 1px oklch(1 0 0 / 4%), 0 18px 40px -24px oklch(0 0 0 / 90%); }
+.frame-imax { position: relative; border: 1px solid var(--border); background: var(--card); }
+.film-frame { border-top: 2px solid color-mix(in oklab, var(--star) 45%, transparent); }
+.frame-imax::before { content: ''; position: absolute; top: -1px; left: 50%; width: 64px; height: 6px; transform: translateX(-50%); border-radius: 0 0 6px 6px; background: color-mix(in oklab, var(--primary) 80%, transparent); pointer-events: none; z-index: 1; }
+.frame-perf { position: relative; border-radius: 6px; background: var(--muted); padding-left: 16px !important; }
+.frame-perf::before { content: ''; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 6px; background: repeating-linear-gradient(to bottom, var(--background) 0 6px, transparent 6px 12px); border-radius: 2px; }
+.zolly-icon { width: 1.9em; height: 1.45em; flex-shrink: 0; filter: drop-shadow(0 4px 10px color-mix(in oklab, var(--primary) 40%, transparent)); }
+.zolly-slogan { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: .36em; color: var(--muted-foreground); margin-top: .35em; letter-spacing: .02em; white-space: nowrap; }
+.zolly-xl .zolly-slogan { font-size: .22em; }
+.compact-hero { min-height: 190px !important; }
+.compact-hero .hero-content { padding-block: 28px; }
+@layer base { h4, h5, h6, legend, [data-slot=card-title], [role=tab], button { font-family: var(--font-display); } }

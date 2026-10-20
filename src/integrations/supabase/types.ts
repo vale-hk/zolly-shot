@@ -185,6 +185,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_ideas: {
+        Row: {
+          area: string
+          body: string
+          created_at: string
+          id: string
+          media_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          area: string
+          body: string
+          created_at?: string
+          id?: string
+          media_id?: string | null
+          title: string
+          user_id?: string
+        }
+        Update: {
+          area?: string
+          body?: string
+          created_at?: string
+          id?: string
+          media_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_media_status: {
         Row: {
           media_id: string
@@ -218,6 +248,16 @@ export type Database = {
     }
     Functions: {
       cinetrack_assurance_ok: { Args: never; Returns: boolean }
+      my_notifications: {
+        Args: never
+        Returns: {
+          activity_id: string
+          actor: string
+          body: string
+          created_at: string
+          kind: string
+        }[]
+      }
       post_like_counts: {
         Args: never
         Returns: {

@@ -31,3 +31,7 @@
 - [x] Detail modal with rating, review, remove; posters; catalog 1920–today, genres, add-then-choose status; films only with adaptation note.
 - [x] Community likes, comments and quick status menu.
 - [ ] Verify signed-in flows end-to-end. Blocker: no confirmed test account available.
+## Zolly Shot round 2
+- [x] Brand font on headings/buttons, new logo (IMAX frame, camera, film strip) with slogan.
+- [x] Dashboard header with welcome, compact once name + pseudonym set (no avatar by design).
+- [x] Cinematic frames for cards; private "Mis ideas" with four templates; notification bell with replies.

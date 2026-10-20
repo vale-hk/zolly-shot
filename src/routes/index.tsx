@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, Clapperboard, NotebookPen, UserRound, Users } from "lucide-react";
 import { CameraHeader } from "@/components/layout/CameraHeader";
-import { PageHeader } from "@/components/layout/AppShell";
 import { MediaCard } from "@/components/media/MediaCard";
 import { Button } from "@/components/ui/button";
 import { inputCls } from "@/components/ui-kit/Modal";
@@ -35,7 +34,7 @@ function Dashboard() {
   const count = (s: MediaStatus) => statuses.filter(x => x.status === s).length;
   const recent = [...statuses].sort((a, b) => b.updated_at.localeCompare(a.updated_at)).slice(0, 5).map(s => media.find(m => m.id === s.media_id)).filter(m => !!m);
   return <>
-    <PageHeader title={`Hola, ${pseudonym || displayName}`} subtitle="Tu sala privada de Zolly Shot." />
+    <div className="-mx-4 -mt-6 mb-8 md:-mx-10 md:-mt-10"><CameraHeader welcome={pseudonym || displayName} compact={displayName !== "Cinéfilo" && !!pseudonym} /></div>
     <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
       <div className="space-y-6">
         <div className="grid grid-cols-3 gap-3">{(["watched", "watching", "watchlist"] as MediaStatus[]).map(s => <div key={s} className="ticket px-4"><p className="font-display text-3xl">{count(s)}</p><p className="text-xs text-muted-foreground">{STATUS_LABELS.movie[s]}</p></div>)}</div>
