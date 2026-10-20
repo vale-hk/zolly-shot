@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { CalendarDays, Clapperboard, Compass, LayoutDashboard, NotebookPen, Users, LogOut, ShieldCheck } from "lucide-react";
 import { ZollyLogo } from "./ZollyLogo";
+import { NotificationBell } from '@/components/social/NotificationBell';
 import type { ReactNode } from "react";
 
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen md:flex">
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r bg-card/40 p-5 backdrop-blur md:flex">
-        <Link to="/" className="mb-8"><ZollyLogo /></Link>
+        <Link to="/" aria-label="Ir al Inicio" className="mb-8"><ZollyLogo /></Link>
         <nav className="flex flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon }) => (
             <Link key={to} to={to} activeOptions={{ exact: to === "/" }} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground" activeProps={{ className: "bg-primary/10 !text-primary font-semibold" }}>
@@ -35,11 +36,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Link>
           ))}
         </nav>
-        <div className="mt-auto border-t pt-4">{user ? <><p className="mb-2 truncate text-sm">{displayName}</p><Button variant="ghost" asChild><Link to="/seguridad"><ShieldCheck />Seguridad de cuenta</Link></Button><Button variant="ghost" onClick={logout}><LogOut />Cerrar sesión</Button></> : <Button onClick={() => openAuth()}>Iniciar Sesión</Button>}<Link to="/privacidad" className="mt-3 block text-xs text-muted-foreground underline">Privacidad</Link></div>
+        <div className="mt-auto border-t pt-4">{user ? <><div className="mb-2 flex items-center justify-between gap-2"><p className="truncate text-sm">{displayName}</p><NotificationBell /></div><Button variant="ghost" asChild><Link to="/seguridad"><ShieldCheck />Seguridad de cuenta</Link></Button><Button variant="ghost" onClick={logout}><LogOut />Cerrar sesión</Button></> : <Button onClick={() => openAuth()}>Iniciar Sesión</Button>}<Link to="/privacidad" className="mt-3 block text-xs text-muted-foreground underline">Privacidad</Link></div>
       </aside>
 
       <header className="sticky top-0 z-40 flex items-center gap-2 border-b bg-background/80 px-4 py-3 backdrop-blur md:hidden">
-        <Link to="/"><ZollyLogo /></Link><div className="ml-auto flex">{user ? <><Button variant="ghost" size="icon" asChild><Link to="/seguridad" aria-label="Seguridad de cuenta"><ShieldCheck /></Link></Button><Button variant="ghost" size="icon" aria-label="Cerrar sesión" onClick={logout}><LogOut /></Button></> : <Button size="sm" onClick={() => openAuth()}>Iniciar Sesión</Button>}</div>
+        <Link to="/" aria-label="Ir al Inicio"><ZollyLogo /></Link><div className="ml-auto flex">{user ? <><NotificationBell /><Button variant="ghost" size="icon" asChild><Link to="/seguridad" aria-label="Seguridad de cuenta"><ShieldCheck /></Link></Button><Button variant="ghost" size="icon" aria-label="Cerrar sesión" onClick={logout}><LogOut /></Button></> : <Button size="sm" onClick={() => openAuth()}>Iniciar Sesión</Button>}</div>
       </header>
 
       <main className="flex-1 px-4 pb-24 pt-6 md:px-10 md:pb-10 md:pt-10 min-w-0">{children}</main>
