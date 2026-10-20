@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, Clapperboard, NotebookPen, UserRound, Users } from "lucide-react";
+import { CalendarDays, Clapperboard, Compass, NotebookPen, UserRound, Users } from "lucide-react";
 import { CameraHeader } from "@/components/layout/CameraHeader";
 import { MediaCard } from "@/components/media/MediaCard";
 import { Button } from "@/components/ui/button";
@@ -30,28 +30,24 @@ function Home() {
 }
 
 function Dashboard() {
-  const { statuses, media, displayName, pseudonym } = useStore();
-  const count = (s: MediaStatus) => statuses.filter(x => x.status === s).length;
-  const recent = [...statuses].sort((a, b) => b.updated_at.localeCompare(a.updated_at)).slice(0, 5).map(s => media.find(m => m.id === s.media_id)).filter(m => !!m);
+  const { displayName, pseudonym } = useStore();
   return <>
-    <div className="-mx-4 -mt-6 mb-8 md:-mx-10 md:-mt-10"><CameraHeader welcome={pseudonym || displayName} compact={displayName !== "Cinéfilo" && !!pseudonym} /></div>
-    <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-      <div className="space-y-6">
-        <div className="grid grid-cols-3 gap-3">{(["watched", "watching", "watchlist"] as MediaStatus[]).map(s => <div key={s} className="ticket px-4"><p className="font-display text-3xl">{count(s)}</p><p className="text-xs text-muted-foreground">{STATUS_LABELS.movie[s]}</p></div>)}</div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <Shortcut to="/filmoteca" icon={<Clapperboard />} label="Filmoteca" />
-          <Shortcut to="/citas" icon={<NotebookPen />} label="Diario personal" />
-          <Shortcut to="/feed" icon={<Users />} label="Comunidad cinéfila" />
-        </div>
-        <div><h2 className="mb-4 text-2xl">Movimientos recientes</h2>{recent.length ? <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">{recent.map(m => <MediaCard key={m.id} item={m} status={statuses.find(s => s.media_id === m.id)?.status} />)}</div> : <p className="rounded-xl border border-dashed p-8 text-center text-muted-foreground">Aún no guardas películas. <Link to="/explorar" className="text-primary underline">Abre el Catálogo de cine</Link>.</p>}</div>
-      </div>
+    <div className="-mx-4 -mt-6 mb-8 md:-mx-10 md:-mt-10"><CameraHeader compact><h1 className="text-4xl md:text-5xl">¡Hola, {pseudonym || displayName}!</h1><p className="mt-4 max-w-2xl text-lg leading-relaxed text-foreground/85">Qué gusto tenerte de vuelta en Zolly Shot. Este es tu espacio para vivir el cine a tu propio ritmo: explora nuestro catálogo, inmortaliza tus ideas y citas favoritas en el diario personal o comparte tu pasión en la comunidad. ¡Que disfrutes la función!</p></CameraHeader></div>
+    <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
+      <section className="frame-imax self-start p-6"><h2 className="mb-4 text-2xl">Lo que puedes hacer</h2><ul className="space-y-3 text-sm text-muted-foreground">
+        <Cap to="/explorar" icon={<Compass />} label="Catálogo de cine" text="Busca películas y guárdalas en tu Filmoteca." />
+        <Cap to="/filmoteca" icon={<Clapperboard />} label="Filmoteca" text="Marca lo que viste, califica y reseña." />
+        <Cap to="/citas" icon={<NotebookPen />} label="Diario personal" text="Guarda citas públicas e ideas privadas." />
+        <Cap to="/feed" icon={<Users />} label="Comunidad cinéfila" text="Comenta y da me gusta a otros cinéfilos." />
+        <Cap to="/mi-ritmo" icon={<CalendarDays />} label="Mi ritmo" text="Mira tus películas por semana, mes y año." />
+      </ul></section>
       <ProfileCard />
     </div>
   </>;
 }
 
-function Shortcut({ to, icon, label }: { to: "/filmoteca" | "/citas" | "/feed"; icon: React.ReactNode; label: string }) {
-  return <Button variant="outline" asChild className="h-auto justify-between py-4"><Link to={to}><span className="flex items-center gap-2">{icon}{label}</span><ArrowRight /></Link></Button>;
+function Cap({ to, icon, label, text }: { to: "/explorar" | "/filmoteca" | "/citas" | "/feed" | "/mi-ritmo"; icon: React.ReactNode; label: string; text: string }) {
+  return <li><Link to={to} className="flex items-start gap-3 rounded-md p-2 transition hover:bg-muted"><span className="text-star [&_svg]:h-5 [&_svg]:w-5">{icon}</span><span><span className="block font-semibold text-foreground">{label}</span>{text}</span></Link></li>;
 }
 
 function ProfileCard() {

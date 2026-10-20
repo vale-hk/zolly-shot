@@ -8,7 +8,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
   // Pre-bundle lazily discovered UI deps so a mid-session re-optimization can't load a second React copy.
-  vite: { optimizeDeps: { include: ["@radix-ui/react-dropdown-menu", "@radix-ui/react-popover", "@radix-ui/react-tabs"] } },
+  vite: { optimizeDeps: { include: ["@radix-ui/react-dropdown-menu", "@radix-ui/react-popover", "@radix-ui/react-tabs", "framer-motion"] } },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

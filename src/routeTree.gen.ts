@@ -14,7 +14,7 @@ import { Route as CitasRouteImport } from './routes/citas'
 import { Route as ExplorarRouteImport } from './routes/explorar'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as FilmotecaRouteImport } from './routes/filmoteca'
-import { Route as HabitosRouteImport } from './routes/habitos'
+import { Route as MiRitmoRouteImport } from './routes/mi-ritmo'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SeguridadRouteImport } from './routes/seguridad'
@@ -44,9 +44,9 @@ const FilmotecaRoute = FilmotecaRouteImport.update({
   path: '/filmoteca',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HabitosRoute = HabitosRouteImport.update({
-  id: '/habitos',
-  path: '/habitos',
+const MiRitmoRoute = MiRitmoRouteImport.update({
+  id: '/mi-ritmo',
+  path: '/mi-ritmo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacidadRoute = PrivacidadRouteImport.update({
@@ -71,7 +71,7 @@ export interface FileRoutesByFullPath {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/filmoteca': typeof FilmotecaRoute
-  '/habitos': typeof HabitosRoute
+  '/mi-ritmo': typeof MiRitmoRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
   '/seguridad': typeof SeguridadRoute
@@ -82,7 +82,7 @@ export interface FileRoutesByTo {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/filmoteca': typeof FilmotecaRoute
-  '/habitos': typeof HabitosRoute
+  '/mi-ritmo': typeof MiRitmoRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
   '/seguridad': typeof SeguridadRoute
@@ -94,7 +94,7 @@ export interface FileRoutesById {
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
   '/filmoteca': typeof FilmotecaRoute
-  '/habitos': typeof HabitosRoute
+  '/mi-ritmo': typeof MiRitmoRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
   '/seguridad': typeof SeguridadRoute
@@ -107,7 +107,7 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/feed'
     | '/filmoteca'
-    | '/habitos'
+    | '/mi-ritmo'
     | '/privacidad'
     | '/reset-password'
     | '/seguridad'
@@ -118,7 +118,7 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/feed'
     | '/filmoteca'
-    | '/habitos'
+    | '/mi-ritmo'
     | '/privacidad'
     | '/reset-password'
     | '/seguridad'
@@ -129,7 +129,7 @@ export interface FileRouteTypes {
     | '/explorar'
     | '/feed'
     | '/filmoteca'
-    | '/habitos'
+    | '/mi-ritmo'
     | '/privacidad'
     | '/reset-password'
     | '/seguridad'
@@ -141,7 +141,7 @@ export interface RootRouteChildren {
   ExplorarRoute: typeof ExplorarRoute
   FeedRoute: typeof FeedRoute
   FilmotecaRoute: typeof FilmotecaRoute
-  HabitosRoute: typeof HabitosRoute
+  MiRitmoRoute: typeof MiRitmoRoute
   PrivacidadRoute: typeof PrivacidadRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SeguridadRoute: typeof SeguridadRoute
@@ -184,11 +184,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FilmotecaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/habitos': {
-      id: '/habitos'
-      path: '/habitos'
-      fullPath: '/habitos'
-      preLoaderRoute: typeof HabitosRouteImport
+    '/mi-ritmo': {
+      id: '/mi-ritmo'
+      path: '/mi-ritmo'
+      fullPath: '/mi-ritmo'
+      preLoaderRoute: typeof MiRitmoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacidad': {
@@ -221,7 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExplorarRoute: ExplorarRoute,
   FeedRoute: FeedRoute,
   FilmotecaRoute: FilmotecaRoute,
-  HabitosRoute: HabitosRoute,
+  MiRitmoRoute: MiRitmoRoute,
   PrivacidadRoute: PrivacidadRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SeguridadRoute: SeguridadRoute,

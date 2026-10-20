@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { CalendarDays, Clapperboard, Compass, LayoutDashboard, NotebookPen, Users, LogOut, ShieldCheck } from "lucide-react";
 import { ZollyLogo } from "./ZollyLogo";
+import { CameraHeader } from "./CameraHeader";
 import { NotificationBell } from '@/components/social/NotificationBell';
 import type { ReactNode } from "react";
 
@@ -12,7 +13,7 @@ import { useQueryClient } from '@tanstack/react-query';
 const NAV = [
   { to: "/", label: "Inicio", short: "Inicio", icon: LayoutDashboard },
   { to: "/filmoteca", label: "Filmoteca", short: "Filmoteca", icon: Clapperboard },
-  { to: "/habitos", label: "Hábitos", short: "Hábitos", icon: CalendarDays },
+  { to: "/mi-ritmo", label: "Mi ritmo", short: "Mi ritmo", icon: CalendarDays },
   { to: "/citas", label: "Diario personal", short: "Diario", icon: NotebookPen },
   { to: "/feed", label: "Comunidad cinéfila", short: "Comunidad", icon: Users },
   { to: "/explorar", label: "Catálogo de cine", short: "Catálogo", icon: Compass },
@@ -58,13 +59,5 @@ export function AppShell({ children }: { children: ReactNode }) {
 }
 
 export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
-  return (
-    <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <h1 className="text-4xl font-semibold md:text-5xl">{title}</h1>
-        {subtitle && <p className="mt-2 text-muted-foreground">{subtitle}</p>}
-      </div>
-      {action}
-    </div>
-  );
+  return <div className="-mx-4 -mt-6 mb-8 md:-mx-10 md:-mt-10"><CameraHeader compact title={title} subtitle={subtitle} action={action} /></div>;
 }
