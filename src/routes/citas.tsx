@@ -11,9 +11,9 @@ export const Route = createFileRoute("/citas")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Citas Célebres · CineTrack" },
+      { title: "Citas Célebres · Zolly Shot" },
       { name: "description", content: "Un muro con las frases que te marcaron del cine." },
-      { property: "og:title", content: "Citas Célebres · CineTrack" },
+      { property: "og:title", content: "Citas Célebres · Zolly Shot" },
       { property: "og:description", content: "Un muro con las frases que te marcaron del cine." },
     ],
   }),

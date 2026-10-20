@@ -20,13 +20,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
   const location = useLocation();
   const logout = async () => { await queryClient.cancelQueries(); queryClient.clear(); await supabase.auth.signOut(); };
-  if (!user && location.pathname === '/') return <div className="min-h-screen"><header className="flex items-center justify-between gap-3 border-b px-6 py-4 md:px-10"><Link to="/" className="flex items-center gap-2 font-display text-2xl"><Clapperboard className="text-primary" />CineTrack</Link><div className="flex gap-2"><Button variant="ghost" onClick={() => openAuth('login')}>Iniciar Sesión</Button><Button className="hidden sm:inline-flex" onClick={() => openAuth('signup')}>Registrarse</Button></div></header>{children}</div>;
+  if (!user && location.pathname === '/') return <div className="min-h-screen"><header className="flex items-center justify-between gap-3 border-b px-6 py-4 md:px-10"><Link to="/" className="flex items-center gap-2 font-display text-2xl"><Clapperboard className="text-primary" />Zolly Shot</Link><div className="flex gap-2"><Button variant="ghost" onClick={() => openAuth('login')}>Iniciar Sesión</Button><Button className="hidden sm:inline-flex" onClick={() => openAuth('signup')}>Registrarse</Button></div></header>{children}</div>;
   return (
     <div className="min-h-screen md:flex">
       <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r bg-card/40 p-5 backdrop-blur md:flex">
         <Link to="/" className="mb-8 flex items-center gap-2">
           <Clapperboard className="h-7 w-7 text-primary" />
-          <span className="font-display text-2xl font-semibold">CineTrack</span>
+          <span className="font-display text-2xl font-semibold">Zolly Shot</span>
         </Link>
         <nav className="flex flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon }) => (
@@ -41,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <header className="sticky top-0 z-40 flex items-center gap-2 border-b bg-background/80 px-4 py-3 backdrop-blur md:hidden">
         <Clapperboard className="h-6 w-6 text-primary" />
-        <span className="font-display text-xl font-semibold">CineTrack</span><div className="ml-auto flex">{user ? <><Button variant="ghost" size="icon" asChild><Link to="/seguridad" aria-label="Seguridad de cuenta"><ShieldCheck /></Link></Button><Button variant="ghost" size="icon" aria-label="Cerrar sesión" onClick={logout}><LogOut /></Button></> : <Button size="sm" onClick={() => openAuth()}>Iniciar Sesión</Button>}</div>
+        <span className="font-display text-xl font-semibold">Zolly Shot</span><div className="ml-auto flex">{user ? <><Button variant="ghost" size="icon" asChild><Link to="/seguridad" aria-label="Seguridad de cuenta"><ShieldCheck /></Link></Button><Button variant="ghost" size="icon" aria-label="Cerrar sesión" onClick={logout}><LogOut /></Button></> : <Button size="sm" onClick={() => openAuth()}>Iniciar Sesión</Button>}</div>
       </header>
 
       <main className="flex-1 px-4 pb-24 pt-6 md:px-10 md:pb-10 md:pt-10 min-w-0">{children}</main>

@@ -12,7 +12,11 @@ export interface MediaItem {
   synopsis?: string | undefined;
   director?: string | undefined;
   duration?: number | undefined;
+  /** Title of the book or work this film adapts; Zolly Shot only stores films. */
+  based_on?: string | undefined;
 }
+
+export interface PostComment { id: string; activity_id: string; display_name: string; body: string; created_at: string; }
 
 export interface UserMediaStatus {
   media_id: string;

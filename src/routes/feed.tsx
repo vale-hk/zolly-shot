@@ -14,9 +14,9 @@ export const Route = createFileRoute("/feed")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Feed Social · CineTrack" },
+      { title: "Feed Social · Zolly Shot" },
       { name: "description", content: "Calificaciones, citas y reseñas de la comunidad." },
-      { property: "og:title", content: "Feed Social · CineTrack" },
+      { property: "og:title", content: "Feed Social · Zolly Shot" },
       { property: "og:description", content: "Calificaciones, citas y reseñas de la comunidad." },
     ],
   }),

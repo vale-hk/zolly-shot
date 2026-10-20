@@ -15,9 +15,9 @@ export const Route = createFileRoute("/explorar")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Explorar películas · CineTrack" },
+      { title: "Explorar películas · Zolly Shot" },
       { name: "description", content: "Busca y filtra películas por año y género." },
-      { property: "og:title", content: "Explorar películas · CineTrack" },
+      { property: "og:title", content: "Explorar películas · Zolly Shot" },
       { property: "og:description", content: "Busca y filtra películas por año y género." },
     ],
   }),

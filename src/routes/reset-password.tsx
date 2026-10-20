@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { inputCls } from '@/components/ui-kit/Modal';
 import { passwordSchema, safeAuthError } from '@/lib/auth-rules';
-export const Route = createFileRoute('/reset-password')({ head: () => ({ meta: [{ title: 'Restablecer contraseña · CineTrack' }, { name: 'description', content: 'Recupera el acceso a tu diario de cine.' }, { property: 'og:title', content: 'Restablecer contraseña · CineTrack' }, { property: 'og:description', content: 'Recupera el acceso a tu diario de cine.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }), component: ResetPassword });
+export const Route = createFileRoute('/reset-password')({ head: () => ({ meta: [{ title: 'Restablecer contraseña · Zolly Shot' }, { name: 'description', content: 'Recupera el acceso a tu diario de cine.' }, { property: 'og:title', content: 'Restablecer contraseña · Zolly Shot' }, { property: 'og:description', content: 'Recupera el acceso a tu diario de cine.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' }] }), component: ResetPassword });
 function ResetPassword() {
   const [recovery, setRecovery] = useState(false); const [password, setPassword] = useState(''); const [message, setMessage] = useState(''); const [pending, setPending] = useState(false);
   useEffect(() => { setRecovery(new URLSearchParams(window.location.hash.slice(1)).get('type') === 'recovery'); }, []);
@@ -17,7 +17,7 @@ function ResetPassword() {
       const { data, error: sessionError } = await supabase.auth.getUser();
       if (sessionError || !data.user) { setMessage('El enlace venció. Solicita uno nuevo.'); return; }
       const { error } = await supabase.auth.updateUser({ password });
-      setMessage(error ? safeAuthError(error.code) : 'Contraseña actualizada. Ya puedes volver a tu biblioteca.');
+      setMessage(error ? safeAuthError(error.code) : 'Contraseña actualizada. Ya puedes volver a tu Filmoteca.');
       if (!error) setPassword('');
     } catch { setMessage('No se pudo conectar. Intenta nuevamente.'); } finally { setPending(false); }
   };

@@ -14,9 +14,9 @@ export const Route = createFileRoute("/")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "CineTrack · Tu diario cinematográfico" },
+      { title: "Zolly Shot · Tu diario cinematográfico" },
       { name: "description", content: "Tus películas vistas, en curso y por ver, con calificaciones." },
-      { property: "og:title", content: "CineTrack · Tu diario cinematográfico" },
+      { property: "og:title", content: "Zolly Shot · Tu diario cinematográfico" },
       { property: "og:description", content: "Tus películas vistas, en curso y por ver, con calificaciones." },
     ],
   }),
@@ -60,7 +60,7 @@ function Library() {
       </div>
 
       {rows.length === 0 ? (
-        <p className="rounded-xl border border-dashed p-10 text-center text-muted-foreground">{loading ? "Cargando tu biblioteca…" : "Nada por aquí todavía. Encuentra una película en Explorar."}</p>
+        <p className="rounded-xl border border-dashed p-10 text-center text-muted-foreground">{loading ? "Cargando tu Filmoteca…" : "Nada por aquí todavía. Encuentra una película en Explorar."}</p>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {rows.map(({ s, item }) => (
