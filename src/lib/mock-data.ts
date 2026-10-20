@@ -6,7 +6,9 @@ import p5 from "@/assets/p5.jpg";
 import p6 from "@/assets/p6.jpg";
 import type { Activity, MediaItem, Quote, UserMediaStatus } from "./types";
 
-export const GENRES = ["Drama", "Ciencia ficción", "Romance", "Terror", "Animación", "Acción", "Noir"];
+export const GENRES = ["Acción", "Animación", "Aventura", "Bélico", "Biográfico", "Ciencia ficción", "Comedia", "Documental", "Drama", "Fantasía", "Musical", "Neorrealismo", "Noir", "Romance", "Suspenso", "Terror", "Thriller psicológico", "Western"];
+export const FIRST_YEAR = 1920;
+export const catalogYears = (now = new Date()) => Array.from({ length: now.getFullYear() - FIRST_YEAR + 1 }, (_, i) => now.getFullYear() - i);
 
 export const MEDIA: MediaItem[] = [
   { id: "m1", title: "Lluvia de Neón", synopsis: "En una ciudad que vive bajo la lluvia, una detective encuentra una cinta que conecta una desaparición con los secretos de su pasado. Mientras las luces de neón ocultan las huellas, deberá decidir cuánto está dispuesta a perder por revelar la verdad.", director: "Elena Ríos", duration: 118, year: 2023, genre: "Noir", poster_url: p1, type: "movie" },

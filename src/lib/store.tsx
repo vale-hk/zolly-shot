@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { FEED, MEDIA, QUOTES } from './mock-data';
 import { saveOnce } from './library-rules';
-import type { Activity, MediaItem, MediaStatus, Quote, UserMediaStatus } from './types';
+import type { Activity, MediaItem, MediaStatus, PostComment, Quote, UserMediaStatus } from './types';
 import { StoreContext, type Store } from './store-context';
 export { useStore } from './store-context';
 const today = () => new Date().toLocaleDateString('en-CA');
@@ -18,6 +18,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const identity = useRef<string | null>(null);
   const syncRevision = useRef(0);
   const [displayName, setDisplayName] = useState('Cinéfilo');
+  const [pseudonym, setPseudonym] = useState<string | null>(null);
+  const [likeCounts, setLikeCounts] = useState<Record<string, number>>({});
+  const [myLikes, setMyLikes] = useState<string[]>([]);
+  const [comments, setComments] = useState<PostComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'signup' | null>(null);
   const replaceStatuses = (rows: UserMediaStatus[]) => { statusesRef.current = rows; setStatuses(rows); };
@@ -33,20 +37,26 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       }
       setAuthMode(null);
     }
-    const [catalog, qs, activities, library, profile] = await Promise.all([
-      supabase.from('media_items').select('id,title,year,genre,poster_url,type,synopsis,director,duration'), supabase.from('quotes').select('id,media_id,quote_text,timestamp,display_name,created_at').order('created_at', { ascending: false }).limit(100),
+    const [catalog, qs, activities, library, profile, cms, counts, mine] = await Promise.all([
+      supabase.from('media_items').select('id,title,year,genre,poster_url,type,synopsis,director,duration,based_on'), supabase.from('quotes').select('id,media_id,quote_text,timestamp,display_name,created_at').order('created_at', { ascending: false }).limit(100),
       supabase.from('activity_feed').select('id,media_id,action_type,comment,rating,display_name,created_at').order('created_at', { ascending: false }).limit(100),
       next ? supabase.from('user_media_status').select('*').eq('user_id', next.id) : Promise.resolve({ data: [], error: null }),
-      next ? supabase.from('profiles').select('display_name').eq('id', next.id).maybeSingle() : Promise.resolve({ data: null, error: null }),
+      next ? supabase.from('profiles').select('display_name,pseudonym').eq('id', next.id).maybeSingle() : Promise.resolve({ data: null, error: null }),
+      supabase.from('post_comments').select('id,activity_id,display_name,body,created_at').order('created_at').limit(500),
+      supabase.rpc('post_like_counts'),
+      next ? supabase.from('post_likes').select('activity_id').eq('user_id', next.id) : Promise.resolve({ data: [], error: null }),
     ]);
     if (identity.current !== id || syncRevision.current !== revision) return;
     const err = catalog.error || qs.error || activities.error || library.error || profile.error;
     if (err) toast.error('No pudimos cargar tus datos. Intenta nuevamente.');
-    setMedia([...MEDIA, ...(catalog.data ?? []).map(m => ({ ...m, type: m.type as MediaItem['type'], synopsis: m.synopsis ?? undefined, director: m.director ?? undefined, duration: m.duration ?? undefined }))]);
+    setMedia([...MEDIA, ...(catalog.data ?? []).map(m => ({ ...m, type: m.type as MediaItem['type'], synopsis: m.synopsis ?? undefined, director: m.director ?? undefined, duration: m.duration ?? undefined, based_on: m.based_on ?? undefined }))]);
     setQuotes([...(qs.data ?? []).map(q => ({ ...q, user: q.display_name })), ...QUOTES]);
     setFeed([...(activities.data ?? []).map(a => ({ ...a, user: a.display_name, action_type: a.action_type as Activity['action_type'], comment: a.comment ?? undefined, rating: a.rating ?? undefined, created_at: new Date(a.created_at).toLocaleDateString('es-CL') })), ...FEED]);
     replaceStatuses((library.data ?? []).map(s => ({ ...s, status: s.status as MediaStatus })));
-    setDisplayName(profile.data?.display_name ?? 'Cinéfilo'); setLoading(false);
+    setDisplayName(profile.data?.display_name ?? 'Cinéfilo'); setPseudonym(profile.data?.pseudonym ?? null);
+    setComments((cms.data ?? []).map(c => ({ ...c, created_at: new Date(c.created_at).toLocaleDateString('es-CL') })));
+    setLikeCounts(Object.fromEntries((counts.data ?? []).map(c => [c.activity_id, Number(c.likes)])));
+    setMyLikes((mine.data ?? []).map(l => l.activity_id)); setLoading(false);
   };
   useEffect(() => {
     const revision = syncRevision.current;
@@ -55,7 +65,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     });
   }, []);
   const signedIn = () => {
-    if (loading) { toast('Un momento, estamos cargando tu biblioteca.'); return false; }
+    if (loading) { toast('Un momento, estamos cargando tu Filmoteca.'); return false; }
     if (user) return true;
     setAuthMode('login'); return false;
   };
@@ -85,15 +95,42 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     if (error) { replaceStatuses(previous); toast.error('No se pudo guardar la película.'); }
     else toast.success('Guardada en tu Watchlist');
   };
-  const store: Store = { media, statuses, quotes, feed, user, loading, displayName, authMode,
+  const removeFromList = async (id: string) => {
+    if (!signedIn() || !user) return;
+    const previous = statusesRef.current;
+    replaceStatuses(previous.filter(s => s.media_id !== id));
+    const { error } = await supabase.from('user_media_status').delete().eq('user_id', user.id).eq('media_id', id);
+    if (error) { replaceStatuses(previous); toast.error('No se pudo eliminar de tu lista.'); } else toast.success('Eliminada de tu Filmoteca');
+  };
+  const updateProfile = async (name: string, alias: string) => {
+    if (!signedIn() || !user) return false;
+    const { error } = await supabase.from('profiles').update({ display_name: name.trim(), pseudonym: alias.trim() || null }).eq('id', user.id);
+    if (error) { toast.error('No se pudo guardar tu perfil.'); return false; }
+    setDisplayName(name.trim()); setPseudonym(alias.trim() || null); toast.success('Perfil actualizado'); return true;
+  };
+  const toggleLike = async (activityId: string) => {
+    if (!signedIn() || !user) return;
+    const liked = myLikes.includes(activityId);
+    setMyLikes(l => liked ? l.filter(x => x !== activityId) : [...l, activityId]);
+    setLikeCounts(c => ({ ...c, [activityId]: Math.max(0, (c[activityId] ?? 0) + (liked ? -1 : 1)) }));
+    const { error } = liked ? await supabase.from('post_likes').delete().eq('user_id', user.id).eq('activity_id', activityId) : await supabase.from('post_likes').insert({ activity_id: activityId, user_id: user.id });
+    if (error) { setMyLikes(l => liked ? [...l, activityId] : l.filter(x => x !== activityId)); setLikeCounts(c => ({ ...c, [activityId]: Math.max(0, (c[activityId] ?? 0) + (liked ? 1 : -1)) })); toast.error('No se pudo registrar tu Me gusta.'); }
+  };
+  const addComment = async (activityId: string, body: string) => {
+    if (!signedIn() || !user) return false;
+    const { data, error } = await supabase.from('post_comments').insert({ activity_id: activityId, body: body.trim() }).select('id').single();
+    if (error) { toast.error('No se pudo publicar tu comentario.'); return false; }
+    setComments(c => [...c, { id: data.id, activity_id: activityId, display_name: displayName, body: body.trim(), created_at: 'ahora' }]); return true;
+  };
+  const store: Store = { media, statuses, quotes, feed, user, loading, displayName, authMode, pseudonym, likeCounts, myLikes, comments, removeFromList, updateProfile, toggleLike, addComment,
     openAuth: (mode = 'login') => setAuthMode(mode), closeAuth: () => setAuthMode(null), syncUser, setStatus, saveToWatchlist,
     addMedia: async (m, status = 'watchlist') => {
       if (!signedIn() || !user) return;
       const duplicate = media.find(x => x.title.trim().toLowerCase() === m.title.trim().toLowerCase() && x.year === m.year);
-      if (duplicate) { await saveToWatchlist(duplicate.id); return; }
-      const { data, error } = await supabase.from('media_items').insert({ ...m, synopsis: m.synopsis ?? null, director: m.director ?? null, duration: m.duration ?? null, owner_id: user.id }).select('id').single();
+      if (duplicate) { await saveToWatchlist(duplicate.id); return duplicate.id; }
+      const { data, error } = await supabase.from('media_items').insert({ ...m, type: 'movie', synopsis: m.synopsis ?? null, director: m.director ?? null, duration: m.duration ?? null, based_on: m.based_on ?? null, owner_id: user.id }).select('id').single();
       if (error) { toast.error('No se pudo agregar la película.'); return; }
-      setMedia(rows => [{ ...m, id: data.id }, ...rows]); await setStatus(data.id, status);
+      setMedia(rows => [{ ...m, id: data.id }, ...rows]); await setStatus(data.id, status); return data.id;
     },
     rate: async (id, rating, comment) => { if (!signedIn()) return; if (await setStatus(id, 'watched', rating)) await post('rated', id, comment, rating); },
     addQuote: async (media_id, quote_text, timestamp) => {

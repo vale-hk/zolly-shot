@@ -1,13 +1,18 @@
 import { createContext, useContext, type Context } from 'react';
 import type { User } from '@supabase/supabase-js';
-import type { Activity, MediaItem, MediaStatus, Quote, UserMediaStatus } from './types';
+import type { Activity, MediaItem, MediaStatus, PostComment, Quote, UserMediaStatus } from './types';
 
 export interface Store {
   media: MediaItem[]; statuses: UserMediaStatus[]; quotes: Quote[]; feed: Activity[];
   user: User | null; displayName: string; loading: boolean; authMode: 'login' | 'signup' | null;
   openAuth: (mode?: 'login' | 'signup') => void; closeAuth: () => void;
   syncUser: (user: User | null) => Promise<void>;
-  addMedia: (m: Omit<MediaItem, 'id'>, status?: MediaStatus) => Promise<void>;
+  addMedia: (m: Omit<MediaItem, 'id'>, status?: MediaStatus) => Promise<string | void>;
+  pseudonym: string | null; likeCounts: Record<string, number>; myLikes: string[]; comments: PostComment[];
+  removeFromList: (id: string) => Promise<void>;
+  updateProfile: (name: string, pseudonym: string) => Promise<boolean>;
+  toggleLike: (activityId: string) => Promise<void>;
+  addComment: (activityId: string, body: string) => Promise<boolean>;
   setStatus: (id: string, status: MediaStatus) => Promise<void | boolean>;
   saveToWatchlist: (id: string) => Promise<void>;
   rate: (id: string, rating: number, comment?: string) => Promise<void>;

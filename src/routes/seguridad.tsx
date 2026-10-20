@@ -8,8 +8,8 @@ import { inputCls } from '@/components/ui-kit/Modal';
 import { passwordSchema, otpSchema, safeAuthError } from '@/lib/auth-rules';
 
 export const Route = createFileRoute('/seguridad')({ head: () => ({ meta: [
-  { title: 'Seguridad de cuenta · CineTrack' }, { name: 'description', content: 'Verificación en dos pasos, contraseña y cierre de sesiones de CineTrack.' },
-  { property: 'og:title', content: 'Seguridad de cuenta · CineTrack' }, { property: 'og:description', content: 'Protege el acceso a tu diario cinematográfico.' },
+  { title: 'Seguridad de cuenta · Zolly Shot' }, { name: 'description', content: 'Verificación en dos pasos, contraseña y cierre de sesiones de Zolly Shot.' },
+  { property: 'og:title', content: 'Seguridad de cuenta · Zolly Shot' }, { property: 'og:description', content: 'Protege el acceso a tu diario cinematográfico.' },
   { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' },
 ] }), component: SecurityPage });
 
@@ -39,7 +39,7 @@ function SecurityPage() {
       const { error } = await supabase.auth.mfa.unenroll({ factorId: f.id });
       if (error) { setMessage('No se pudo reiniciar la configuración.'); return; }
     }
-    const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'CineTrack', issuer: 'CineTrack' });
+    const { data, error } = await supabase.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'Zolly Shot', issuer: 'Zolly Shot' });
     if (error || !data) { setMessage('La verificación no está disponible. Intenta nuevamente.'); return; }
     setEnrollment({ id: data.id, qr: data.totp.qr_code, secret: data.totp.secret });
   });

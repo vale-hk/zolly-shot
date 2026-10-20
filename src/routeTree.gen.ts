@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CitasRouteImport } from './routes/citas'
 import { Route as ExplorarRouteImport } from './routes/explorar'
 import { Route as FeedRouteImport } from './routes/feed'
+import { Route as FilmotecaRouteImport } from './routes/filmoteca'
 import { Route as HabitosRouteImport } from './routes/habitos'
 import { Route as PrivacidadRouteImport } from './routes/privacidad'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -36,6 +37,11 @@ const ExplorarRoute = ExplorarRouteImport.update({
 const FeedRoute = FeedRouteImport.update({
   id: '/feed',
   path: '/feed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FilmotecaRoute = FilmotecaRouteImport.update({
+  id: '/filmoteca',
+  path: '/filmoteca',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HabitosRoute = HabitosRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
+  '/filmoteca': typeof FilmotecaRoute
   '/habitos': typeof HabitosRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
+  '/filmoteca': typeof FilmotecaRoute
   '/habitos': typeof HabitosRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/citas': typeof CitasRoute
   '/explorar': typeof ExplorarRoute
   '/feed': typeof FeedRoute
+  '/filmoteca': typeof FilmotecaRoute
   '/habitos': typeof HabitosRoute
   '/privacidad': typeof PrivacidadRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/citas'
     | '/explorar'
     | '/feed'
+    | '/filmoteca'
     | '/habitos'
     | '/privacidad'
     | '/reset-password'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/citas'
     | '/explorar'
     | '/feed'
+    | '/filmoteca'
     | '/habitos'
     | '/privacidad'
     | '/reset-password'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/citas'
     | '/explorar'
     | '/feed'
+    | '/filmoteca'
     | '/habitos'
     | '/privacidad'
     | '/reset-password'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   CitasRoute: typeof CitasRoute
   ExplorarRoute: typeof ExplorarRoute
   FeedRoute: typeof FeedRoute
+  FilmotecaRoute: typeof FilmotecaRoute
   HabitosRoute: typeof HabitosRoute
   PrivacidadRoute: typeof PrivacidadRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/feed'
       fullPath: '/feed'
       preLoaderRoute: typeof FeedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/filmoteca': {
+      id: '/filmoteca'
+      path: '/filmoteca'
+      fullPath: '/filmoteca'
+      preLoaderRoute: typeof FilmotecaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/habitos': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   CitasRoute: CitasRoute,
   ExplorarRoute: ExplorarRoute,
   FeedRoute: FeedRoute,
+  FilmotecaRoute: FilmotecaRoute,
   HabitosRoute: HabitosRoute,
   PrivacidadRoute: PrivacidadRoute,
   ResetPasswordRoute: ResetPasswordRoute,

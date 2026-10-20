@@ -8,8 +8,8 @@ import { useStore } from '@/lib/store';
 import { inPeriod } from '@/lib/library-rules';
 import { cn } from '@/lib/utils';
 export const Route = createFileRoute('/habitos')({ head: () => ({ meta: [
-  { title: 'Hábitos de cine · CineTrack' }, { name: 'description', content: 'Tus películas vistas esta semana, este mes y este año.' },
-  { property: 'og:title', content: 'Hábitos de cine · CineTrack' }, { property: 'og:description', content: 'Tus películas vistas esta semana, este mes y este año.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' },
+  { title: 'Hábitos de cine · Zolly Shot' }, { name: 'description', content: 'Tus películas vistas esta semana, este mes y este año.' },
+  { property: 'og:title', content: 'Hábitos de cine · Zolly Shot' }, { property: 'og:description', content: 'Tus películas vistas esta semana, este mes y este año.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary_large_image' },
 ] }), component: Habits });
 const periods = [{ id: 'week', label: 'Esta Semana' }, { id: 'month', label: 'Este Mes' }, { id: 'year', label: 'Este Año' }] as const;
 function Habits() {

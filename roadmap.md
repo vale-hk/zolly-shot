@@ -26,3 +26,8 @@
 ## Remaining architecture targets
 - HttpOnly sessions and strict script CSP are not implemented; current managed browser sessions and Start hydration must be migrated together before claiming those targets.
 - External penetration testing and operational/legal compliance certification are not performed.
+## Zolly Shot rebrand
+- [x] Brand, logo, vertigo landing, Filmoteca rename, sections and dashboard profile (name + pseudonym).
+- [x] Detail modal with rating, review, remove; posters; catalog 1920–today, genres, add-then-choose status; films only with adaptation note.
+- [x] Community likes, comments and quick status menu.
+- [ ] Verify signed-in flows end-to-end. Blocker: no confirmed test account available.

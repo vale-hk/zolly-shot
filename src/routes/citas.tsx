@@ -11,10 +11,10 @@ export const Route = createFileRoute("/citas")({
     meta: [
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Citas Célebres · CineTrack" },
-      { name: "description", content: "Un muro con las frases que te marcaron del cine." },
-      { property: "og:title", content: "Citas Célebres · CineTrack" },
-      { property: "og:description", content: "Un muro con las frases que te marcaron del cine." },
+      { title: "Diario personal · Zolly Shot" },
+      { name: "description", content: "Tu diario personal con las frases que te marcaron del cine." },
+      { property: "og:title", content: "Diario personal · Zolly Shot" },
+      { property: "og:description", content: "Tu diario personal con las frases que te marcaron del cine." },
     ],
   }),
   component: Quotes,
@@ -39,7 +39,7 @@ function Quotes() {
 
   return (
     <>
-      <PageHeader title="Citas Célebres" subtitle="Frases que se quedan contigo después de los créditos." action={<Button onClick={() => user ? setOpen(true) : openAuth()}><Plus className="h-4 w-4" /> Publicar cita</Button>} />
+      <PageHeader title="Diario personal" subtitle="Las frases y momentos que se quedan contigo después de los créditos." action={<Button onClick={() => user ? setOpen(true) : openAuth()}><Plus className="h-4 w-4" /> Publicar cita</Button>} />
       <div className="columns-1 gap-4 sm:columns-2 xl:columns-3">
         {quotes.map((q) => {
           const m = media.find((x) => x.id === q.media_id);

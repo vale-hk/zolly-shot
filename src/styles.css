@@ -107,7 +107,22 @@
 .film-frame::before { left: 3px; }
 .film-frame::after { right: 3px; }
 .camera-hero { position: relative; overflow: hidden; min-height: 380px; display: flex; align-items: center; }
+.camera-hero { --dolly: 0; }
 .camera-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: transform; }
+.camera-hero > .dolly-bg { filter: blur(6px) saturate(.7) brightness(.55); transform: scale(calc(1.15 + var(--dolly) * .6)); animation: dolly-bg 2.6s ease-out both; }
+.camera-hero > .dolly-fg { -webkit-mask-image: radial-gradient(ellipse 55% 70% at 68% 50%, #000 55%, transparent 80%); mask-image: radial-gradient(ellipse 55% 70% at 68% 50%, #000 55%, transparent 80%); transform: scale(calc(1 - var(--dolly) * .22)) translateY(calc(var(--dolly) * 40px)); animation: dolly-fg 2.6s ease-out both; }
+@keyframes dolly-bg { from { transform: scale(1.6); } }
+@keyframes dolly-fg { from { transform: scale(.82); } }
+.zolly-logo { display: inline-flex; align-items: center; gap: .45em; font-family: var(--font-display); font-weight: 600; line-height: 1; }
+.zolly-badge { display: grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: .35em; background: var(--primary); color: var(--primary-foreground); box-shadow: inset 0 1px 0 oklch(1 0 0 / 30%), 0 6px 18px -6px var(--primary); }
+.zolly-badge svg { width: .9em; height: .9em; }
+.zolly-word { background: linear-gradient(180deg, oklch(0.97 0.01 80) 0%, oklch(0.78 0.03 80) 45%, oklch(0.55 0.02 70) 52%, oklch(0.9 0.05 80) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: -.02em; }
+.zolly-cap { position: relative; display: inline-block; font-style: italic; background: linear-gradient(180deg, var(--star), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 1.18em; margin-right: -.04em; }
+.zolly-cap::after { content: ''; position: absolute; left: -.05em; right: -.05em; bottom: .02em; height: .14em; background: repeating-linear-gradient(90deg, var(--star) 0 .12em, transparent .12em .22em); opacity: .8; }
+.zolly-gap { display: inline-block; width: .28em; }
+.zolly-md { font-size: 1.5rem; } .zolly-lg { font-size: 1.9rem; } .zolly-xl { font-size: clamp(2.8rem, 8vw, 5.4rem); }
+.poster { position: relative; border-radius: 6px; overflow: hidden; border: 2px solid oklch(0.32 0.01 60); box-shadow: inset 0 0 0 1px oklch(1 0 0 / 12%), 0 1px 0 oklch(1 0 0 / 10%), 0 14px 30px -14px oklch(0 0 0 / 90%); }
+.poster::after { content: ''; position: absolute; inset: 0; background: linear-gradient(125deg, oklch(1 0 0 / 22%) 0%, oklch(1 0 0 / 6%) 28%, transparent 42%, transparent 78%, oklch(1 0 0 / 8%) 100%); pointer-events: none; }
 .camera-hero::after { content: ''; position: absolute; inset: 0; background: var(--gradient-hero); pointer-events: none; }
 .landing-hero { min-height: min(660px, 78svh); }
 .hero-content { position: relative; z-index: 1; width: 100%; max-width: 1280px; margin: auto; padding: 60px 40px; }
@@ -120,7 +135,7 @@ progress::-moz-progress-bar { background: var(--star); }
 @media (max-width: 767px) {
   .camera-hero { min-height: 360px; }
   .landing-hero { min-height: min(650px, 85svh); }
-  .camera-hero > img { object-position: 62% center; opacity: .65; }
+  .camera-hero > img { object-position: 62% center; } .camera-hero > .dolly-fg { opacity: .65; }
   .camera-hero::after { background: var(--gradient-mobile-hero); }
   .hero-content { padding: 42px 24px; }
   .hero-title { font-size: 56px; }
