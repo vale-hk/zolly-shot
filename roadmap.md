@@ -12,7 +12,9 @@
 - [x] Deliver secure-registration checklist distinguishing verified controls from pending work.
 
 ## Functional security and privacy
-- [ ] Add repeatable browser checks for signup, confirmation, login and safe errors, plus a real-inbox verification run.
+- [x] Add and run seven browser regression checks for signup, simulated confirmation, login, reload and safe errors; all fourteen existing unit tests pass.
+- [x] Add a human-assisted real-inbox test without stored credentials or administrator confirmation.
+- [ ] Run the real-inbox signup/confirmation/login test. Blocker: a new real inbox controlled by the tester and its confirmation link are unavailable; delivery and live confirmation are not verified.
 - [x] Harden hosted registration and password settings, validation and recovery.
 - [x] Remove public account identifiers and automatic activity sharing; enforce database validation.
 - [x] Add authenticator verification and account security controls with database assurance enforcement.
