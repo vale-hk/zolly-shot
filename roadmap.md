@@ -12,6 +12,7 @@
 - [x] Deliver secure-registration checklist distinguishing verified controls from pending work.
 
 ## Functional security and privacy
+- [ ] Add repeatable browser checks for signup, confirmation, login and safe errors, plus a real-inbox verification run.
 - [x] Harden hosted registration and password settings, validation and recovery.
 - [x] Remove public account identifiers and automatic activity sharing; enforce database validation.
 - [x] Add authenticator verification and account security controls with database assurance enforcement.

@@ -56,7 +56,7 @@ export function AuthModal() {
         setPassword('');
         if (error) setMessage('No pudimos iniciar sesión. Revisa tu correo y contraseña.');
       }
-    } catch { setMessage('No se pudo conectar. Intenta nuevamente.'); } finally { setPending(false); }
+    } catch { setMessage('No se pudo conectar. Intenta nuevamente.'); } finally { setPassword(''); setPending(false); }
   };
   const social = async (provider: 'google' | 'lovable') => {
     setMessage('');
