@@ -10,7 +10,7 @@ import { ZollyLogo } from './ZollyLogo';
 const LOOP = { duration: 9, repeat: Infinity, repeatType: 'mirror' as const, ease: 'easeInOut' as const };
 
 /** Continuous dolly zoom (vertigo): background pushes in while the camera pulls back, in an endless subtle loop. */
-export function CameraHeader({ landing = false, compact = false, title, subtitle, action, children }: { landing?: boolean; compact?: boolean; title?: string; subtitle?: string; action?: ReactNode; children?: ReactNode }) {
+export function CameraHeader({ landing = false, compact = false, title, subtitle, action, children }: { landing?: boolean; compact?: boolean; title?: string; subtitle?: string | undefined; action?: ReactNode; children?: ReactNode }) {
   const { openAuth } = useStore(); const still = useReducedMotion();
   return <section className={`camera-hero ${landing ? 'landing-hero' : ''} ${compact ? 'compact-hero' : ''}`} style={{ perspective: 900 }}>
     <motion.img src={camera} alt="" aria-hidden className="dolly-bg" width={1920} height={1024} animate={still ? {} : { scale: [1.15, 1.45], rotateX: [0, 2] }} transition={LOOP} />
