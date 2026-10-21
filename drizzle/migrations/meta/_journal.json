@@ -36,6 +36,13 @@
       "when": 1792506923591,
       "tag": "0004_ideas_and_notifications",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792584758348,
+      "tag": "0005_hide_comment_author_ids",
+      "breakpoints": true
     }
   ]
 }
